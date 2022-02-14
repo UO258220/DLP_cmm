@@ -1,5 +1,7 @@
-import statements.Statement;
-import types.Type;
+package program;
+
+import program.statements.Statement;
+import program.types.Type;
 
 import java.util.ArrayList;
 import java.util.List;

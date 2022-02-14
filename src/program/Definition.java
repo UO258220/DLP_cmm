@@ -1,4 +1,6 @@
-import types.Type;
+package program;
+
+import program.types.Type;
 
 public interface Definition {
     String getName();

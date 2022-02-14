@@ -1,5 +1,7 @@
-import statements.Statement;
-import types.Type;
+package program;
+
+import program.statements.Statement;
+import program.types.Type;
 
 public class VarDefinition extends AbstractASTNode implements Definition, Statement {
 

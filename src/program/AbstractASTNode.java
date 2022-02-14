@@ -1,3 +1,5 @@
+package program;
+
 public abstract class AbstractASTNode implements ASTNode {
 
     private int line;
