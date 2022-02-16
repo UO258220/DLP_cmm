@@ -17,7 +17,7 @@ public class CmmParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		ID=1, CHAR_CONSTANT=2, REAL_CONSTANT=3, INT_CONSTANT=4, COMMENT=5, EOL=6, 
+		ID=1, INT_CONSTANT=2, CHAR_CONSTANT=3, REAL_CONSTANT=4, COMMENT=5, EOL=6, 
 		WS=7;
 	public static final int
 		RULE_program = 0;
@@ -35,7 +35,7 @@ public class CmmParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "ID", "CHAR_CONSTANT", "REAL_CONSTANT", "INT_CONSTANT", "COMMENT", 
+			null, "ID", "INT_CONSTANT", "CHAR_CONSTANT", "REAL_CONSTANT", "COMMENT", 
 			"EOL", "WS"
 		};
 	}
@@ -91,10 +91,6 @@ public class CmmParser extends Parser {
 	}
 
 	public static class ProgramContext extends ParserRuleContext {
-		public List<TerminalNode> REAL_CONSTANT() { return getTokens(CmmParser.REAL_CONSTANT); }
-		public TerminalNode REAL_CONSTANT(int i) {
-			return getToken(CmmParser.REAL_CONSTANT, i);
-		}
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -104,24 +100,9 @@ public class CmmParser extends Parser {
 	public final ProgramContext program() throws RecognitionException {
 		ProgramContext _localctx = new ProgramContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_program);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(3); 
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			do {
-				{
-				{
-				setState(2);
-				match(REAL_CONSTANT);
-				}
-				}
-				setState(5); 
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			} while ( _la==REAL_CONSTANT );
 			}
 		}
 		catch (RecognitionException re) {
@@ -136,9 +117,8 @@ public class CmmParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\t\n\4\2\t\2\3\2\6"+
-		"\2\6\n\2\r\2\16\2\7\3\2\2\2\3\2\2\2\2\t\2\5\3\2\2\2\4\6\7\5\2\2\5\4\3"+
-		"\2\2\2\6\7\3\2\2\2\7\5\3\2\2\2\7\b\3\2\2\2\b\3\3\2\2\2\3\7";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\t\7\4\2\t\2\3\2\3"+
+		"\2\3\2\2\2\3\2\2\2\2\5\2\4\3\2\2\2\4\5\3\2\2\2\5\3\3\2\2\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
