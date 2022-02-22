@@ -28,6 +28,7 @@ public class LexerHelper {
 					traversedString += str.charAt(i);
 				} else return 0;
 			}
+			// int gets converted into its ASCII character
 			return (char) Integer.parseInt(traversedString);
 		}
 		return 0;
