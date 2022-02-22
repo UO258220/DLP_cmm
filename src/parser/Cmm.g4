@@ -1,9 +1,13 @@
 grammar Cmm;	
 
-program: REAL_CONSTANT+
-       ;
+program:
+                    ;
 
 ID:                 ('_' | LETTER) ('_' | LETTER | [0-9])*
+                    ;
+
+INT_CONSTANT:       [1-9][0-9]*
+                    | '0'
                     ;
 
 CHAR_CONSTANT:      '\'' ( . | '\\' INT_CONSTANT | '\\' 'n' | '\\' 't' ) '\''
@@ -15,10 +19,6 @@ REAL_CONSTANT:      INT_CONSTANT? '.' [0-9]+ EXPONENT?
                     ;
 
 fragment EXPONENT:  [eE] [-+]? INT_CONSTANT
-                    ;
-  		 
-INT_CONSTANT:       [1-9][0-9]*
-                    | '0'
                     ;
 
 fragment LETTER:    [a-zA-Z]
