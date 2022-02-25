@@ -1,6 +1,6 @@
 grammar Cmm;
 
-program:            definition* main_definition
+program:            definition* main_definition EOF
                     ;
 
 definition:         var_definition
