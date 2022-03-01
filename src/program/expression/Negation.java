@@ -2,7 +2,7 @@ package program.expression;
 
 import program.statements.AbstractStatement;
 
-public class Negation extends AbstractStatement {
+public class Negation extends AbstractExpression {
 
     private Expression expression;
 

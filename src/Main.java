@@ -1,6 +1,9 @@
+import introspector.model.IntrospectorModel;
+import introspector.view.IntrospectorTree;
 import parser.*;
 
 import org.antlr.v4.runtime.*;
+import program.Program;
 
 public class Main {
 	
@@ -16,8 +19,12 @@ public class Main {
 
 		// create a parser that feeds off the tokens buffer
 		CommonTokenStream tokens = new CommonTokenStream(lexer); 
-		CmmParser parser = new CmmParser(tokens);	
-		parser.program();		
+		CmmParser parser = new CmmParser(tokens);
+
+		// parser.program();
+		Program ast = parser.program().ast;
+		IntrospectorModel model = new IntrospectorModel("Program", ast);
+		new IntrospectorTree("Introspector", model);
 	}
 	
 
