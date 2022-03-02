@@ -20,22 +20,38 @@ main_definition:    'void' 'main' '(' ')' '{' var_definition* statement* '}'
 var_definition:     type ID ( ',' ID )* ';'
                     ;
 
-type:               type '[' INT_CONSTANT ']'
-                    | 'struct' '{' (type ID ';')+ '}'
+type returns [Type ast]:
+                    type '[' INT_CONSTANT ']'
+                    | s='struct' { $ast = new RecordType($s.getLine(), $s.getCharPositionInLine() + 1,
+                        new ArrayList<RecordField>()); }
+                        '{' (
+                            t=type ID ';' { ((RecordType)$ast).addField(new RecordField($t.ast, $ID.text)); }
+                        )+ '}'
                     | func_type
+                        { $ast = $func_type.ast; }
                     | return_type
+                        { $ast = $return_type.ast; }
                     ;
 
-func_type:          return_type ID '(' ( built_in_type ID ( ',' built_in_type ID )* )? ')'
+func_type returns [Type ast]:
+                    return_type ID '(' ( built_in_type ID ( ',' built_in_type ID )* )? ')'
+                    //TODO
                     ;
 
-return_type:        built_in_type
-                    | 'void'
+return_type returns [Type ast]:
+                    built_in_type
+                        { $ast = $built_in_type.ast; }
+                    | v='void'
+                        { $ast = new VoidType($v.getLine(), $v.getCharPositionInLine() + 1); }
                     ;
 
-built_in_type:      'double'
-                    | 'int'
-                    | 'char'
+built_in_type returns [Type ast]:
+                    d='double'
+                        { $ast = new DoubleType($d.getLine(), $d.getCharPositionInLine() + 1); }
+                    | i='int'
+                        { $ast = new IntegerType($i.getLine(), $i.getCharPositionInLine() + 1); }
+                    | c='char'
+                        { $ast = new CharType($c.getLine(), $c.getCharPositionInLine() + 1); }
                     ;
 
 statement returns [List<Statement> ast = new ArrayList<Statement>()]:
