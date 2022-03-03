@@ -620,8 +620,7 @@ public class CmmParser extends Parser {
 					setState(143);
 					match(T__9);
 
-					                                      List<Integer> sizes = new ArrayList<Integer>();
-					                                      sizes.add(LexerHelper.lexemeToInt((((TypeContext)_localctx).i1!=null?((TypeContext)_localctx).i1.getText():null)));
+					                                      String newLexeme = (((TypeContext)_localctx).t1!=null?_input.getText(((TypeContext)_localctx).t1.start,((TypeContext)_localctx).t1.stop):null);
 					                                  
 					setState(151);
 					_errHandler.sync(this);
@@ -634,7 +633,7 @@ public class CmmParser extends Parser {
 							match(T__8);
 							setState(146);
 							((TypeContext)_localctx).i2 = match(INT_CONSTANT);
-							 sizes.add(LexerHelper.lexemeToInt((((TypeContext)_localctx).i2!=null?((TypeContext)_localctx).i2.getText():null))); 
+							 newLexeme += "[" + (((TypeContext)_localctx).i2!=null?((TypeContext)_localctx).i2.getText():null) + "]"; 
 							setState(148);
 							match(T__9);
 							}
@@ -644,7 +643,17 @@ public class CmmParser extends Parser {
 						_errHandler.sync(this);
 						_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
 					}
-					 ((TypeContext)_localctx).ast =  new ArrayType(((TypeContext)_localctx).t1.ast.getLine(), ((TypeContext)_localctx).t1.ast.getColumn(), sizes, ((TypeContext)_localctx).t1.ast); 
+
+					                                      CharStream input = CharStreams.fromString(newLexeme);
+					                                      CmmLexer lexer = new CmmLexer(input);
+
+					                                      CommonTokenStream tokens = new CommonTokenStream(lexer);
+					                                      CmmParser parser = new CmmParser(tokens);
+
+					                                      Type internalType = parser.type().ast;
+					                                      ((TypeContext)_localctx).ast =  new ArrayType(((TypeContext)_localctx).t1.ast.getLine(), ((TypeContext)_localctx).t1.ast.getColumn(),
+					                                      LexerHelper.lexemeToInt((((TypeContext)_localctx).i1!=null?((TypeContext)_localctx).i1.getText():null)), internalType);
+					                                  
 					}
 					} 
 				}

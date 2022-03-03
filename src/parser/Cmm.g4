@@ -107,6 +107,27 @@ type returns [Type ast]:
 
                     t1=type '[' i1=INT_CONSTANT ']'
                         {
+                            String newLexeme = $t1.text;
+                        }
+                        ('['
+                            i2=INT_CONSTANT
+                                { newLexeme += "[" + $i2.text + "]"; }
+                        ']')*
+                        {
+                            CharStream input = CharStreams.fromString(newLexeme);
+                            CmmLexer lexer = new CmmLexer(input);
+
+                            CommonTokenStream tokens = new CommonTokenStream(lexer);
+                            CmmParser parser = new CmmParser(tokens);
+
+                            Type internalType = parser.type().ast;
+                            $ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(),
+                            LexerHelper.lexemeToInt($i1.text), internalType);
+                        }
+
+/*
+                    t1=type '[' i1=INT_CONSTANT ']'
+                        {
                             List<Integer> sizes = new ArrayList<Integer>();
                             sizes.add(LexerHelper.lexemeToInt($i1.text));
                         }
@@ -115,6 +136,7 @@ type returns [Type ast]:
                                 { sizes.add(LexerHelper.lexemeToInt($i2.text)); }
                         ']')*
                         { $ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), sizes, $t1.ast); }
+*/
 
                     | s='struct' { $ast = new RecordType($s.getLine(), $s.getCharPositionInLine() + 1,
                         new ArrayList<RecordField>()); }

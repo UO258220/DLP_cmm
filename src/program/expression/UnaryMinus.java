@@ -12,4 +12,9 @@ public class UnaryMinus extends AbstractExpression {
     public Expression getExpression() {
         return expression;
     }
+
+    @Override
+    public String toString() {
+        return String.format("UnaryMinus[expression=%s]", expression.toString());
+    }
 }

@@ -14,4 +14,9 @@ public class WriteStatement extends AbstractStatement {
     public Expression getExpression() {
         return expression;
     }
+
+    @Override
+    public String toString() {
+        return String.format("WriteStatement[expression=%s]", expression.toString());
+    }
 }

@@ -12,4 +12,9 @@ public class RealLiteral extends AbstractExpression {
     public double getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("RealLiteral[value=%f]", value);
+    }
 }

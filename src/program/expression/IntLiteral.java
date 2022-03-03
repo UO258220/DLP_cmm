@@ -12,4 +12,9 @@ public class IntLiteral extends AbstractExpression {
     public int getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("IntLiteral[value=%d]", value);
+    }
 }

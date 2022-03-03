@@ -20,4 +20,9 @@ public class Cast extends AbstractExpression {
     public Type getCastType() {
         return castType;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Cast[expression=%s, type=%s]", expression.toString(), castType.toString());
+    }
 }

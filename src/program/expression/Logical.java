@@ -24,4 +24,9 @@ public class Logical extends AbstractExpression {
     public Expression getRight() {
         return right;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Logical[operator=%s, left=%s, right=%s]", operator, left.toString(), right.toString());
+    }
 }

@@ -1,6 +1,7 @@
 package program;
 
 import program.statements.Statement;
+import program.types.RecordField;
 import program.types.Type;
 
 import java.util.ArrayList;
@@ -27,5 +28,14 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
     @Override
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder(String.format("FuncDefinition[name=%s, type=%s, body=[", name, type.toString()));
+        for (Statement s : statements) {
+            res.append(String.format("\n%s", s.toString()));
+        }
+        return res.append("]]").toString();
     }
 }

@@ -1,6 +1,7 @@
 package program.types;
 
 import program.VarDefinition;
+import program.statements.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,5 +23,14 @@ public class FunctionType extends AbstractType {
 
     public List<VarDefinition> getParams() {
         return params;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder(String.format("FunctionType[returnType=%s, params=[", returnType.toString()));
+        for (VarDefinition p : params) {
+            res.append(String.format("\n%s", p.toString()));
+        }
+        return res.append("]]").toString();
     }
 }

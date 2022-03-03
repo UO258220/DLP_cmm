@@ -1,5 +1,7 @@
 package program.types;
 
+import program.VarDefinition;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,5 +20,14 @@ public class RecordType extends AbstractType {
 
     public void addField(RecordField field) {
         fields.add(field);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder("RecordType[fields=[");
+        for (RecordField f : fields) {
+            res.append(String.format("\n%s", f.toString()));
+        }
+        return res.append("]]").toString();
     }
 }

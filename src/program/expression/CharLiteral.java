@@ -12,4 +12,9 @@ public class CharLiteral extends AbstractExpression {
     public char getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("CharLiteral[value=%c]", value);
+    }
 }

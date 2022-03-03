@@ -14,4 +14,9 @@ public class Negation extends AbstractExpression {
     public Expression getExpression() {
         return expression;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Negation[expression=%s]", expression);
+    }
 }

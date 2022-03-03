@@ -1,5 +1,7 @@
 package program.types;
 
+import program.VarDefinition;
+
 public class RecordField {
 
     private Type type;
@@ -16,5 +18,10 @@ public class RecordField {
 
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("RecordField[type=%s, name=%s]", type.toString(), name);
     }
 }

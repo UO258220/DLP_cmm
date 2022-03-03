@@ -1,5 +1,7 @@
 package program.types;
 
+import program.statements.Statement;
+
 import java.util.List;
 
 public class ArrayType extends AbstractType {
@@ -13,6 +15,7 @@ public class ArrayType extends AbstractType {
         this.innerType = innerType;
     }
 
+/**
     public ArrayType(int line, int column, List<Integer> sizes, Type baseType) {
         super(line, column);
         this.size = sizes.get(0);
@@ -23,6 +26,7 @@ public class ArrayType extends AbstractType {
             this.innerType = baseType;
         }
     }
+**/
 
     public int getSize() {
         return size;
@@ -34,5 +38,10 @@ public class ArrayType extends AbstractType {
 
     public void setInnerType(Type innerType) {
         this.innerType = innerType;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ArrayType[type=%s, size=%d]", innerType.toString(), size);
     }
 }

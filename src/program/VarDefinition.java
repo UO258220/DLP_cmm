@@ -23,4 +23,9 @@ public class VarDefinition extends AbstractASTNode implements Definition, Statem
     public Type getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return String.format("VarDefinition[name=%s, type=%s]", name, type.toString());
+    }
 }

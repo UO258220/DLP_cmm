@@ -24,4 +24,9 @@ public class Arithmetic extends AbstractExpression {
     public Expression getRight() {
         return right;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Arithmetic[operator=%s, left=%s, right=%s]", operator, left.toString(), right.toString());
+    }
 }

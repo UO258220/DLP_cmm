@@ -18,4 +18,9 @@ public class Indexing extends AbstractExpression {
     public Expression getRight() {
         return right;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Indexing[left=%s, right=%s]", left.toString(), right.toString());
+    }
 }
