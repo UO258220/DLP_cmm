@@ -3,7 +3,7 @@ import introspector.view.IntrospectorTree;
 import parser.*;
 
 import org.antlr.v4.runtime.*;
-import program.Program;
+import ast.Program;
 
 public class Main {
 	

@@ -1,19 +1,17 @@
 // Generated from C:/Users/UO258220/IdeaProjects/DLP_cmm/src/parser\Cmm.g4 by ANTLR 4.9.2
 package parser;
 
-    import program.*;
-    import program.expression.*;
-    import program.statements.*;
-    import program.types.*;
+    import ast.*;
+    import ast.expression.*;
+    import ast.statements.*;
+    import ast.types.*;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.antlr.v4.runtime.tree.*;
+	import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
+	import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class CmmParser extends Parser {
@@ -35,7 +33,7 @@ public class CmmParser extends Parser {
 		RULE_body = 8, RULE_expression = 9, RULE_arguments = 10;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "definition", "var_definition", "main_definition", "type", 
+				"ast", "definition", "var_definition", "main_definition", "type",
 			"return_type", "built_in_type", "statement", "body", "expression", "arguments"
 		};
 	}

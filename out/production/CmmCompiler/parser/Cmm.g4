@@ -1,10 +1,10 @@
 grammar Cmm;
 
 @header {
-    import program.*;
-    import program.expression.*;
-    import program.statements.*;
-    import program.types.*;
+    import ast.*;
+    import ast.expression.*;
+    import ast.statements.*;
+    import ast.types.*;
 }
 
 
