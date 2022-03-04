@@ -91,7 +91,7 @@ EOL
 WS
 
 rule names:
-ast
+program
 definition
 var_definition
 main_definition

@@ -144,7 +144,7 @@ type returns [Type ast]:
                             t1=type ID ';' { ((RecordType)$ast).addField(new RecordField($t1.ast, $ID.text)); }
                         )+ '}'
 
-                    | r1=return_type
+                    | r1=built_in_type
                         { $ast = $r1.ast; }
                     ;
 
