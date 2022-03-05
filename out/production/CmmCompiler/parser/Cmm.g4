@@ -29,37 +29,8 @@ definition returns [List<Definition> ast = new ArrayList<Definition>()]:
 
                     v1=var_definition { $v1.ast.forEach(v -> $ast.add(v)); }
 
-                    | r1=return_type i1=ID
-                        { List<VarDefinition> params = new ArrayList<VarDefinition>(); }
-                        '(' (
-                            b1=built_in_type i2=ID { params.add(new VarDefinition($b1.ast.getLine(),
-                                $b1.ast.getColumn(), $i2.text, $b1.ast)); }
-                            (
-                                ',' b2=built_in_type i3=ID { params.add(new VarDefinition($b2.ast.getLine(),
-                                    $b2.ast.getColumn(), $i3.text, $b2.ast)); }
-                            )*
-                        )? ')'
-                        '{'
-                            { List<Statement> body = new ArrayList<Statement>(); }
-                            (
-                                v1=var_definition { $v1.ast.forEach(v -> body.add((VarDefinition)v)); }
-                            )*
-                            (
-                                s1=statement { $s1.ast.forEach(s -> body.add(s)); }
-                            )*
-                        '}'
-                        { $ast.add(new FuncDefinition(
-                            $i1.getLine(),
-                            $i1.getCharPositionInLine() + 1,
-                            $i1.text,
-                            new FunctionType(
-                                $r1.ast.getLine(),
-                                $r1.ast.getColumn(),
-                                $r1.ast,
-                                params
-                            ),
-                            body
-                        )); }
+                    | f1=func_definition { $ast.add($f1.ast); }
+
                     ;
 
 
@@ -74,18 +45,25 @@ var_definition returns [List<Definition> ast = new ArrayList<Definition>()]:
                         ';'
                     ;
 
+func_definition returns [FuncDefinition ast]:
+                    r1=return_type i1=ID '(' p1=param_definitions ')' '{' b1=func_body '}'
+                        { $ast = new FuncDefinition(
+                            $i1.getLine(),
+                            $i1.getCharPositionInLine() + 1,
+                            $i1.text,
+                            new FunctionType(
+                                $r1.ast.getLine(),
+                                $r1.ast.getColumn(),
+                                $r1.ast,
+                                $p1.ast
+                            ),
+                            $b1.ast
+                        ); }
+                    ;
 
 main_definition returns [FuncDefinition ast]:
 
-                        v='void' m='main' '(' ')' '{'
-                            { List<Statement> body = new ArrayList<Statement>(); }
-                            (
-                                v1=var_definition { $v1.ast.forEach(v -> body.add((VarDefinition)v)); }
-                            )*
-                            (
-                                s1=statement { $s1.ast.forEach(s -> body.add(s)); }
-                            )*
-                        '}'
+                    v='void' m='main' '(' ')' '{' b1=func_body '}'
                         { $ast = new FuncDefinition(
                             $v.getLine(),
                             $v.getCharPositionInLine() + 1,
@@ -96,8 +74,30 @@ main_definition returns [FuncDefinition ast]:
                                 new VoidType($v.getLine(), $v.getCharPositionInLine() + 1),
                                 new ArrayList<VarDefinition>()
                             ),
-                            body
+                            $b1.ast
                         ); }
+                    ;
+
+param_definitions returns [List<VarDefinition> ast = new ArrayList<VarDefinition>()]:
+
+                    t1=built_in_type i1=ID
+                        { $ast.add(new VarDefinition($t1.ast.getLine(), $t1.ast.getColumn(), $i1.text, $t1.ast)); }
+                        (
+                            ',' t2=built_in_type i2=ID
+                                { $ast.add(new VarDefinition($t2.ast.getLine(), $t2.ast.getColumn(), $i2.text,
+                                    $t2.ast)); }
+                        )*
+                    |
+                    ;
+
+func_body returns [List<Statement> ast = new ArrayList<Statement>()]:
+
+                    (
+                        v1=var_definition { $v1.ast.forEach(v -> $ast.add((VarDefinition)v)); }
+                    )*
+                    (
+                        s1=statement { $s1.ast.forEach(s -> $ast.add(s)); }
+                    )*
                     ;
 
 
@@ -106,46 +106,19 @@ main_definition returns [FuncDefinition ast]:
 type returns [Type ast]:
 
                     t1=type '[' i1=INT_CONSTANT ']'
-                        {
-                            String newLexeme = $t1.text;
-                        }
-                        ('['
-                            i2=INT_CONSTANT
-                                { newLexeme += "[" + $i2.text + "]"; }
-                        ']')*
-                        {
-                            CharStream input = CharStreams.fromString(newLexeme);
-                            CmmLexer lexer = new CmmLexer(input);
+                        { $ast = ParserHelper.getArrayType(LexerHelper.lexemeToInt($i1.text), $t1.ast); }
 
-                            CommonTokenStream tokens = new CommonTokenStream(lexer);
-                            CmmParser parser = new CmmParser(tokens);
-
-                            Type internalType = parser.type().ast;
-                            $ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(),
-                            LexerHelper.lexemeToInt($i1.text), internalType);
-                        }
-
-/*
-                    t1=type '[' i1=INT_CONSTANT ']'
-                        {
-                            List<Integer> sizes = new ArrayList<Integer>();
-                            sizes.add(LexerHelper.lexemeToInt($i1.text));
-                        }
-                        ('['
-                            i2=INT_CONSTANT
-                                { sizes.add(LexerHelper.lexemeToInt($i2.text)); }
-                        ']')*
-                        { $ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), sizes, $t1.ast); }
-*/
-
-                    | s='struct' { $ast = new RecordType($s.getLine(), $s.getCharPositionInLine() + 1,
-                        new ArrayList<RecordField>()); }
-                        '{' (
+                    | s='struct'
+                        { $ast = new RecordType($s.getLine(), $s.getCharPositionInLine() + 1,
+                            new ArrayList<RecordField>()); }
+                        '{'
+                        (
                             t1=type ID ';' { ((RecordType)$ast).addField(new RecordField($t1.ast, $ID.text)); }
-                        )+ '}'
+                        )+
+                        '}'
 
-                    | r1=return_type
-                        { $ast = $r1.ast; }
+                    | b1=built_in_type
+                        { $ast = $b1.ast; }
                     ;
 
 
@@ -200,13 +173,13 @@ statement returns [List<Statement> ast = new ArrayList<Statement>()]:
                     | e1=expression '=' e2=expression ';'
                         { $ast.add(new Assignment($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $e2.ast)); }
 
-                    | 'while' '(' e1=expression ')' b1=body
+                    | 'while' '(' e1=expression ')' b1=cond_body
                         { $ast.add(new While($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $b1.ast)); }
 
-                    | 'if' '(' e1=expression ')' b1=body
+                    | 'if' '(' e1=expression ')' b1=cond_body
                         { $ast.add(new IfElse($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $b1.ast)); }
 
-                    | 'if' '(' e1=expression ')' b1=body 'else' b2=body
+                    | 'if' '(' e1=expression ')' b1=cond_body 'else' b2=cond_body
                         { $ast.add(new IfElse($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $b1.ast, $b2.ast)); }
 
                     | 'return' e1=expression
@@ -215,7 +188,7 @@ statement returns [List<Statement> ast = new ArrayList<Statement>()]:
                     ;
 
 
-body returns [List<Statement> ast = new ArrayList<Statement>()]:
+cond_body returns [List<Statement> ast = new ArrayList<Statement>()]:
 
                     s1=statement
                         { $s1.ast.forEach(s -> $ast.add(s)); }
