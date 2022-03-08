@@ -1,3 +1,4 @@
+import errorhandler.ErrorHandler;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
 import parser.*;
@@ -23,8 +24,14 @@ public class Main {
 
 		// parser.program();
 		Program ast = parser.program().ast;
-		IntrospectorModel model = new IntrospectorModel("Program", ast);
-		new IntrospectorTree("Introspector", model);
+		if (ErrorHandler.getInstance().anyErrors())
+			ErrorHandler.getInstance().showErrors(System.err);
+		else {
+			// * The AST is shown
+			IntrospectorModel model=new IntrospectorModel(
+					"Program", ast);
+			new IntrospectorTree("Introspector", model);
+		}
 	}
 	
 

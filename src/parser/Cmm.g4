@@ -84,8 +84,7 @@ param_definitions returns [List<VarDefinition> ast = new ArrayList<VarDefinition
                         { $ast.add(new VarDefinition($t1.ast.getLine(), $t1.ast.getColumn(), $i1.text, $t1.ast)); }
                         (
                             ',' t2=built_in_type i2=ID
-                                { $ast.add(new VarDefinition($t2.ast.getLine(), $t2.ast.getColumn(), $i2.text,
-                                    $t2.ast)); }
+                            { $ast.add(new VarDefinition($t2.ast.getLine(), $t2.ast.getColumn(), $i2.text, $t2.ast)); }
                         )*
 
                     |   // CAN BE EMPTY
@@ -108,16 +107,17 @@ func_body returns [List<Statement> ast = new ArrayList<Statement>()]:
 type returns [Type ast]:
 
                     t1=type '[' i1=INT_CONSTANT ']'
-                        { $ast = ParserHelper.getArrayType(LexerHelper.lexemeToInt($i1.text), $t1.ast); }
+                        { $ast = ParserHelper.createArrayType(LexerHelper.lexemeToInt($i1.text), $t1.ast); }
 
                     | s='struct'
-                        { $ast = new RecordType($s.getLine(), $s.getCharPositionInLine() + 1,
+                        { RecordType aux = new RecordType($s.getLine(), $s.getCharPositionInLine() + 1,
                             new ArrayList<RecordField>()); }
                         '{'
                         (
-                            t1=type ID ';' { ((RecordType)$ast).addField(new RecordField($t1.ast, $ID.text)); }
+                            r1=record_fields { $r1.ast.forEach(f -> aux.addField(f)); }
                         )+
                         '}'
+                        { $ast = aux; }
 
                     | b1=built_in_type
                         { $ast = $b1.ast; }
@@ -144,6 +144,20 @@ built_in_type returns [Type ast]:
 
                     | c='char'
                         { $ast = new CharType($c.getLine(), $c.getCharPositionInLine() + 1); }
+                    ;
+
+
+record_fields returns [List<RecordField> ast = new ArrayList<RecordField>()]:
+
+                    t1=type i1=ID
+                        { $ast.add(new RecordField($i1.getLine(), $i1.getCharPositionInLine() + 1, $t1.ast,
+                            $i1.text)); }
+                        (
+                            ',' i2=ID
+                                { $ast.add(new RecordField($i2.getLine(), $i2.getCharPositionInLine() + 1, $t1.ast,
+                                    $i2.text)); }
+                        )*
+                        ';'
                     ;
 
 
