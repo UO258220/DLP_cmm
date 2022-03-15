@@ -106,16 +106,19 @@ public class TypeCheckVisitor extends AbstractVisitor<Void,Void> {
 
     @Override
     public Void visit(IntLiteral intLiteral, Void param) {
+        intLiteral.setLvalue(false);
         return null;
     }
 
     @Override
     public Void visit(CharLiteral charLiteral, Void param) {
+        charLiteral.setLvalue(false);
         return null;
     }
 
     @Override
     public Void visit(RealLiteral realLiteral, Void param) {
+        realLiteral.setLvalue(false);
         return null;
     }
 }
