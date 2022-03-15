@@ -5,6 +5,7 @@ import parser.*;
 
 import org.antlr.v4.runtime.*;
 import ast.Program;
+import semantic.TypeCheckVisitor;
 
 public class Main {
 	
@@ -24,6 +25,7 @@ public class Main {
 
 		// parser.program();
 		Program ast = parser.program().ast;
+		ast.accept(new TypeCheckVisitor(), null);
 		if (ErrorHandler.getInstance().anyErrors())
 			ErrorHandler.getInstance().showErrors(System.err);
 		else {

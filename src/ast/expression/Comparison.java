@@ -1,5 +1,7 @@
 package ast.expression;
 
+import semantic.Visitor;
+
 public class Comparison extends AbstractExpression {
 
     private String operator;
@@ -28,5 +30,10 @@ public class Comparison extends AbstractExpression {
     @Override
     public String toString() {
         return String.format("Comparison[operator=%s, left=%s, right=%s]", operator, left.toString(), right.toString());
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

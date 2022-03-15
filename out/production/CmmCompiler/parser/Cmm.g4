@@ -84,8 +84,7 @@ param_definitions returns [List<VarDefinition> ast = new ArrayList<VarDefinition
                         { $ast.add(new VarDefinition($t1.ast.getLine(), $t1.ast.getColumn(), $i1.text, $t1.ast)); }
                         (
                             ',' t2=built_in_type i2=ID
-                                { $ast.add(new VarDefinition($t2.ast.getLine(), $t2.ast.getColumn(), $i2.text,
-                                    $t2.ast)); }
+                            { $ast.add(new VarDefinition($t2.ast.getLine(), $t2.ast.getColumn(), $i2.text, $t2.ast)); }
                         )*
 
                     |   // CAN BE EMPTY
@@ -147,13 +146,16 @@ built_in_type returns [Type ast]:
                         { $ast = new CharType($c.getLine(), $c.getCharPositionInLine() + 1); }
                     ;
 
+
 record_fields returns [List<RecordField> ast = new ArrayList<RecordField>()]:
 
-                    t1=type i1=ID { $ast.add(new RecordField($i1.getLine(), $i1.getCharPositionInLine() + 1, $t1.ast,
-                        $i1.text)); }
+                    t1=type i1=ID
+                        { $ast.add(new RecordField($i1.getLine(), $i1.getCharPositionInLine() + 1, $t1.ast,
+                            $i1.text)); }
                         (
-                            ',' i2=ID { $ast.add(new RecordField($i2.getLine(), $i2.getCharPositionInLine() + 1,
-                                $t1.ast, $i2.text)); }
+                            ',' i2=ID
+                                { $ast.add(new RecordField($i2.getLine(), $i2.getCharPositionInLine() + 1, $t1.ast,
+                                    $i2.text)); }
                         )*
                         ';'
                     ;

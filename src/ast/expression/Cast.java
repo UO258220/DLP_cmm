@@ -1,6 +1,7 @@
 package ast.expression;
 
 import ast.types.Type;
+import semantic.Visitor;
 
 public class Cast extends AbstractExpression {
 
@@ -24,5 +25,10 @@ public class Cast extends AbstractExpression {
     @Override
     public String toString() {
         return String.format("Cast[expression=%s, type=%s]", expression.toString(), castType.toString());
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

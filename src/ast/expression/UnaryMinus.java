@@ -1,5 +1,7 @@
 package ast.expression;
 
+import semantic.Visitor;
+
 public class UnaryMinus extends AbstractExpression {
 
     private Expression expression;
@@ -16,5 +18,10 @@ public class UnaryMinus extends AbstractExpression {
     @Override
     public String toString() {
         return String.format("UnaryMinus[expression=%s]", expression.toString());
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

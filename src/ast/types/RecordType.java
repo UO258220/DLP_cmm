@@ -1,6 +1,7 @@
 package ast.types;
 
 import errorhandler.ErrorHandler;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,5 +37,10 @@ public class RecordType extends AbstractType {
             res.append(String.format("\n%s", f.toString()));
         }
         return res.append("]]").toString();
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

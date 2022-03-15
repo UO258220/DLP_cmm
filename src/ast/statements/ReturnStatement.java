@@ -1,6 +1,7 @@
 package ast.statements;
 
 import ast.expression.Expression;
+import semantic.Visitor;
 
 public class ReturnStatement extends AbstractStatement {
 
@@ -18,5 +19,10 @@ public class ReturnStatement extends AbstractStatement {
     @Override
     public String toString() {
         return String.format("ReturnStatement[expression=%s]", expression.toString());
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

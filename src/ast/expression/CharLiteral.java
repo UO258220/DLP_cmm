@@ -1,5 +1,7 @@
 package ast.expression;
 
+import semantic.Visitor;
+
 public class CharLiteral extends AbstractExpression {
 
     private char value;
@@ -16,5 +18,10 @@ public class CharLiteral extends AbstractExpression {
     @Override
     public String toString() {
         return String.format("CharLiteral[value=%c]", value);
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

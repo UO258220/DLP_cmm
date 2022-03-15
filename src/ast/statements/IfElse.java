@@ -1,6 +1,7 @@
 package ast.statements;
 
 import ast.expression.Expression;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,5 +51,10 @@ public class IfElse extends AbstractStatement {
             }
         }
         return res.append("]]").toString();
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

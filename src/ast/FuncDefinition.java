@@ -2,6 +2,7 @@ package ast;
 
 import ast.statements.Statement;
 import ast.types.Type;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,10 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
         return type;
     }
 
+    public List<Statement> getStatements() {
+        return statements;
+    }
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder(String.format("FuncDefinition[name=%s, type=%s, body=[", name, type.toString()));
@@ -36,5 +41,10 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
             res.append(String.format("\n%s", s.toString()));
         }
         return res.append("]]").toString();
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

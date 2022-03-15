@@ -1,6 +1,9 @@
 package ast.types;
 
-public class RecordField extends AbstractType {
+import ast.AbstractASTNode;
+import semantic.Visitor;
+
+public class RecordField extends AbstractASTNode {
 
     private Type type;
     private String name;
@@ -22,5 +25,10 @@ public class RecordField extends AbstractType {
     @Override
     public String toString() {
         return String.format("RecordField[type=%s, name=%s]", type.toString(), name);
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

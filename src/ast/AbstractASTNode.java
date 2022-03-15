@@ -1,5 +1,7 @@
 package ast;
 
+import semantic.Visitor;
+
 public abstract class AbstractASTNode implements ASTNode {
 
     private int line;

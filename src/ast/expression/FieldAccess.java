@@ -1,5 +1,7 @@
 package ast.expression;
 
+import semantic.Visitor;
+
 public class FieldAccess extends AbstractExpression {
 
     private Expression expression;
@@ -22,5 +24,10 @@ public class FieldAccess extends AbstractExpression {
     @Override
     public String toString() {
         return String.format("FieldAccess[expression=%s, right=%s]",expression.toString(), field);
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

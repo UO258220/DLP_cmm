@@ -473,8 +473,7 @@ public class CmmParser extends Parser {
 					((Param_definitionsContext)_localctx).t2 = built_in_type();
 					setState(89);
 					((Param_definitionsContext)_localctx).i2 = match(ID);
-					 _localctx.ast.add(new VarDefinition(((Param_definitionsContext)_localctx).t2.ast.getLine(), ((Param_definitionsContext)_localctx).t2.ast.getColumn(), (((Param_definitionsContext)_localctx).i2!=null?((Param_definitionsContext)_localctx).i2.getText():null),
-					                                    ((Param_definitionsContext)_localctx).t2.ast)); 
+					 _localctx.ast.add(new VarDefinition(((Param_definitionsContext)_localctx).t2.ast.getLine(), ((Param_definitionsContext)_localctx).t2.ast.getColumn(), (((Param_definitionsContext)_localctx).i2!=null?((Param_definitionsContext)_localctx).i2.getText():null), ((Param_definitionsContext)_localctx).t2.ast)); 
 					}
 					}
 					setState(96);
@@ -843,7 +842,7 @@ public class CmmParser extends Parser {
 			setState(161);
 			((Record_fieldsContext)_localctx).i1 = match(ID);
 			 _localctx.ast.add(new RecordField(((Record_fieldsContext)_localctx).i1.getLine(), ((Record_fieldsContext)_localctx).i1.getCharPositionInLine() + 1, ((Record_fieldsContext)_localctx).t1.ast,
-			                        (((Record_fieldsContext)_localctx).i1!=null?((Record_fieldsContext)_localctx).i1.getText():null))); 
+			                            (((Record_fieldsContext)_localctx).i1!=null?((Record_fieldsContext)_localctx).i1.getText():null))); 
 			setState(168);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -854,8 +853,8 @@ public class CmmParser extends Parser {
 				match(T__0);
 				setState(164);
 				((Record_fieldsContext)_localctx).i2 = match(ID);
-				 _localctx.ast.add(new RecordField(((Record_fieldsContext)_localctx).i2.getLine(), ((Record_fieldsContext)_localctx).i2.getCharPositionInLine() + 1,
-				                                ((Record_fieldsContext)_localctx).t1.ast, (((Record_fieldsContext)_localctx).i2!=null?((Record_fieldsContext)_localctx).i2.getText():null))); 
+				 _localctx.ast.add(new RecordField(((Record_fieldsContext)_localctx).i2.getLine(), ((Record_fieldsContext)_localctx).i2.getCharPositionInLine() + 1, ((Record_fieldsContext)_localctx).t1.ast,
+				                                    (((Record_fieldsContext)_localctx).i2!=null?((Record_fieldsContext)_localctx).i2.getText():null))); 
 				}
 				}
 				setState(170);
