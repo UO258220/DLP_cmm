@@ -4,6 +4,7 @@ import ast.FuncDefinition;
 import ast.Program;
 import ast.VarDefinition;
 import ast.expression.*;
+import ast.expression.Module;
 import ast.statements.*;
 import ast.types.*;
 
@@ -159,6 +160,13 @@ public abstract class AbstractVisitor<TP,TR> implements Visitor<TP,TR> {
     public TR visit(Arithmetic arithmetic, TP param) {
         arithmetic.getLeft().accept(this, null);
         arithmetic.getRight().accept(this, null);
+        return null;
+    }
+
+    @Override
+    public TR visit(Module module, TP param) {
+        module.getLeft().accept(this, null);
+        module.getRight().accept(this, null);
         return null;
     }
 

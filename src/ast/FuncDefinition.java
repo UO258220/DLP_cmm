@@ -7,27 +7,13 @@ import semantic.Visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuncDefinition extends AbstractASTNode implements Definition {
+public class FuncDefinition extends AbstractDefinition {
 
-    private String name;
-    private Type type;
     private List<Statement> statements;
 
     public FuncDefinition(int line, int column, String name, Type type, List<Statement> statements) {
-        super(line, column);
-        this.name = name;
-        this.type = type;
+        super(line, column, name, type);
         this.statements = new ArrayList<Statement>(statements);
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Type getType() {
-        return type;
     }
 
     public List<Statement> getStatements() {
@@ -36,7 +22,7 @@ public class FuncDefinition extends AbstractASTNode implements Definition {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(String.format("FuncDefinition[name=%s, type=%s, body=[", name, type.toString()));
+        StringBuilder res = new StringBuilder(String.format("FuncDefinition[name=%s, type=%s, body=[", getName(), getType().toString()));
         for (Statement s : statements) {
             res.append(String.format("\n%s", s.toString()));
         }

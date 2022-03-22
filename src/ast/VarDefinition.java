@@ -4,30 +4,15 @@ import ast.statements.Statement;
 import ast.types.Type;
 import semantic.Visitor;
 
-public class VarDefinition extends AbstractASTNode implements Definition, Statement {
-
-    private String name;
-    private Type type;
+public class VarDefinition extends AbstractDefinition implements Statement {
 
     public VarDefinition(int line, int column, String name, Type type) {
-        super(line, column);
-        this.name = name;
-        this.type = type;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Type getType() {
-        return type;
+        super(line, column, name, type);
     }
 
     @Override
     public String toString() {
-        return String.format("VarDefinition[name=%s, type=%s]", name, type.toString());
+        return String.format("VarDefinition[name=%s, type=%s]", getName(), getType().toString());
     }
 
     @Override

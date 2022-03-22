@@ -2,6 +2,7 @@ package semantic;
 
 import ast.*;
 import ast.expression.*;
+import ast.expression.Module;
 import ast.statements.*;
 import ast.types.*;
 
@@ -56,6 +57,8 @@ public interface Visitor<TP,TR> {
     public TR visit(Negation negation, TP param);
 
     public TR visit(Arithmetic arithmetic, TP param);
+
+    public TR visit(Module module, TP param);
 
     public TR visit(Comparison comparison, TP param);
 

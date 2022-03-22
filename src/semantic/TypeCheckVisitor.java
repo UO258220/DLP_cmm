@@ -4,6 +4,7 @@ import ast.FuncDefinition;
 import ast.Program;
 import ast.VarDefinition;
 import ast.expression.*;
+import ast.expression.Module;
 import ast.statements.*;
 import ast.types.*;
 
@@ -79,6 +80,14 @@ public class TypeCheckVisitor extends AbstractVisitor<Void,Void> {
         arithmetic.getLeft().accept(this, null);
         arithmetic.getRight().accept(this, null);
         arithmetic.setLvalue(false);
+        return null;
+    }
+
+    @Override
+    public Void visit(Module module, Void param) {
+        module.getLeft().accept(this, null);
+        module.getRight().accept(this, null);
+        module.setLvalue(false);
         return null;
     }
 
