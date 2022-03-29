@@ -58,3 +58,4 @@
 /out/production/CmmCompiler/program/types/VoidType.class
 /out/production/CmmCompiler/program/statements/While.class
 /out/production/CmmCompiler/program/statements/WriteStatement.class
+/out/production/CmmCompiler/semantic/IdentificationVisitor.class

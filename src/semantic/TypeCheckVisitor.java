@@ -1,14 +1,93 @@
 package semantic;
 
-import ast.FuncDefinition;
-import ast.Program;
-import ast.VarDefinition;
 import ast.expression.*;
 import ast.expression.Module;
 import ast.statements.*;
 import ast.types.*;
 
 public class TypeCheckVisitor extends AbstractVisitor<Void,Void> {
+
+    /**
+     * Rules for typechecking (AG)
+     *
+     *
+     * P:   FuncDefinition: definition -> type vardefinition*
+     *
+     * P:   FuncInvocation: expression1 -> expression2 expression3*
+     * R:   List<Type> argTypes = expression3*.stream()
+     *                              .map(exp -> exp.type)
+     *                              .toList();
+     *      expression1.type = expression2.type.parenthesis(argTypes)
+     *
+     * P:   FuncInvocation: statement -> expression1 expression2*
+     * R:   List<Type> argTypes = expression3*.stream()
+     *                             .map(exp -> exp.type)
+     *                             .toList();
+     *      expression2.type.parenthesis(argTypes)
+     *
+     * P:   WriteStatement: statement -> expression
+     * R:   expression.type.isWritable()
+     *
+     * P:   ReadStatement:  statement -> expression
+     * R:   expression.type.isReadable()
+     *
+     * P:   Assignment:     statement -> expression1 expression2
+     * R:   expression1.type.assign(expression2.type)
+     *
+     * P:   WhileStmt:      statement1 -> expression statement2*
+     * R:   expression.type.asBoolean()
+     *
+     * P:   IfElse:         statement1 -> expression statement2* statement3*
+     * R:   expression.type.asBoolean()
+     *
+     * P:   ReturnStatement: statement -> expression
+     * R:   expression.type.isReturning(statement.returnType)
+     *
+     * P:   Indexing:       expression1 -> expression2 expression3
+     * R:   expression1.type = expression2.type.squareBrackets(expression3.type)
+     *
+     * P:   FieldAccess:    expression1 -> expression2 ID
+     * R:   expression1.type = expression2.type.dot(ID)
+     *
+     * P:   Cast:           expression1 -> expression2 type
+     * R:   expression1.type = expression2.type.castTo(type)
+     *
+     * P:   UnaryMinus:     expression1 -> expression2
+     * R:   expression1.type = expression2.type.minus()
+     *
+     * P:   Negation:       expression1 -> expression2
+     * R:   expression1.type = expression2.type.negation()
+     *
+     * P:   Arithmetic:     expression1 -> expression2 (+|-|*|/) expression3
+     * R:   expression1.type = expression2.type.arithmetic(expression3.type)
+     *
+     * P:   Module:         expression1 -> expression2 expression3
+     * R:   expression1.type = expression2.type.module(expression3.type)
+     *
+     * P:   Comparison:     expression1 -> expression2 expression3
+     * R:   expression1.type = expression2.type.compare(expression3.type)
+     *
+     * P:   Logical:        expression1 -> expression2 expression3
+     * R:   expression1.type = expression2.type.logical(expression3.type)
+     *
+     * P:   Variable:       expression -> ID
+     * R:   if (expression.definition == null) {
+     *          expression.type = new ErrorType(expression.getLine(),
+     *              expression.getColumn(), "variable is not defined")
+     *      }
+     *      else {
+     *          expression.type = expression.definition.type
+     *      }
+     *
+     * P:   IntLiteral:     expression -> INT_CONSTANT
+     * R:   expression.type = new IntegerType()
+     *
+     * P:   CharLiteral:    expression -> CHAR_CONSTANT
+     * R:   expression.type = new CharType()
+     *
+     * P:   RealLiteral:    expression -> REAL_CONSTANT
+     * R:   expression.type = new DoubleType()
+     */
 
     @Override
     public Void visit(Assignment assignment, Void param) {
