@@ -11,7 +11,10 @@ public class TypeCheckVisitor extends AbstractVisitor<Void,Void> {
      * Rules for typechecking (AG)
      *
      *
-     * P:   FuncDefinition: definition -> type vardefinition*
+     * P:   FuncDefinition: definition -> type vardefinition* statement*
+     * R:   for (Statement s : statement*) {
+     *          s.returnType = type.returnType
+     *      }
      *
      * P:   FuncInvocation: expression1 -> expression2 expression3*
      * R:   List<Type> argTypes = expression3*.stream()
@@ -35,10 +38,16 @@ public class TypeCheckVisitor extends AbstractVisitor<Void,Void> {
      * R:   expression1.type.assign(expression2.type)
      *
      * P:   WhileStmt:      statement1 -> expression statement2*
-     * R:   expression.type.asBoolean()
+     * R:   for (Statement s : statement2*) {
+     *          s.returnType = statement1.returnType
+     *      }
+     *      expression.type.asBoolean()
      *
      * P:   IfElse:         statement1 -> expression statement2* statement3*
-     * R:   expression.type.asBoolean()
+     * R:   for (Statement s : statement2*) {
+     *          s.returnType = statement1.returnType
+     *      }
+     *      expression.type.asBoolean()
      *
      * P:   ReturnStatement: statement -> expression
      * R:   expression.type.isReturning(statement.returnType)
