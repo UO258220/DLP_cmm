@@ -1,16 +1,16 @@
 package ast.types;
 
-import ast.expression.Expression;
 import semantic.Visitor;
 
 public class CharType extends AbstractType {
+
     public CharType(int line, int column) {
         super(line, column);
     }
 
     @Override
     public String toString() {
-        return "CharType[]";
+        return "CharType";
     }
 
     @Override
@@ -24,75 +24,74 @@ public class CharType extends AbstractType {
     }
 
     @Override
-    public void isWritable() {
+    public void asWritable() {
         // No error thrown
     }
 
     @Override
-    public void isReadable() {
+    public void asReadable() {
         // No error thrown
     }
 
     @Override
-    public void assign(Type type) {
+    public void assign(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             // For now, the only thing to do here is to stop the creation of a new error
             return;
         }
         if (!this.equals(type)) {
-            new ErrorType(getLine(), getColumn(), String.format("type %s cannot be assigned to type %s", type, this));
+            new ErrorType(line, column, String.format("type %s cannot be assigned to type %s", type, this));
         }
     }
 
     @Override
-    public void isReturning(Type type) {
+    public void returnMatching(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             // For now, the only thing to do here is to stop the creation of a new error
             return;
         }
         if (!this.equals(type)) {
-            new ErrorType(getLine(), getColumn(), String.format("type %s cannot be returned, expected %s", this, type));
+            new ErrorType(line, column, String.format("type %s cannot be returned, expected %s", this, type));
         }
     }
 
     @Override
-    public Type castTo(Type type, Expression expression) {
+    public Type castTo(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof CharType) {
-            return this;
+            return new CharType(line, column);
         }
         if (type instanceof IntegerType) {
-            return new IntegerType(getLine(), getColumn());
+            return new IntegerType(line, column);
         }
-        return new ErrorType(expression.getLine(), expression.getColumn(),
-                String.format("type %s cannot be casted to %s", this, type));
+        return new ErrorType(line, column, String.format("type %s cannot be casted to %s", this, type));
     }
 
     @Override
-    public Type arithmetic(Type type) {
+    public Type arithmetic(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof CharType) {
-            return new IntegerType(getLine(), getColumn());
+            return new IntegerType(line, column);
         }
         if (type instanceof IntegerType) {
-            return new IntegerType(getLine(), getColumn());
+            return new IntegerType(line, column);
         }
-        return new ErrorType(getLine(), getColumn(),
+        return new ErrorType(line, column,
                 String.format("types %s and %s cannot be the terms of an arithmetic operation", this, type));
     }
 
     @Override
-    public Type compare(Type type) {
+    public Type compare(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof CharType) {
-            return new IntegerType(getLine(), getColumn());
+            return new IntegerType(line, column);
         }
-        return new ErrorType(getLine(), getColumn(), String.format("types %s and %s cannot be compared", this, type));
+        return new ErrorType(line, column, String.format("types %s and %s cannot be compared", this, type));
     }
 }

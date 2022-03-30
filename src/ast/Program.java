@@ -20,11 +20,7 @@ public class Program extends AbstractASTNode {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder("Program[definitions=[");
-        for (Definition d : defs) {
-            res.append(String.format("\n%s", d.toString()));
-        }
-        return res.append("]]").toString();
+        return "Program root";
     }
 
     @Override

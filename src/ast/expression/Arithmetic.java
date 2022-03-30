@@ -29,7 +29,7 @@ public class Arithmetic extends AbstractExpression {
 
     @Override
     public String toString() {
-        return String.format("Arithmetic[operator=%s, left=%s, right=%s]", operator, left.toString(), right.toString());
+        return String.format("Arithmetic[operator=%s]", operator);
     }
 
     @Override

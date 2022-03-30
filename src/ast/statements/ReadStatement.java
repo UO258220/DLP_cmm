@@ -18,7 +18,7 @@ public class ReadStatement extends AbstractStatement {
 
     @Override
     public String toString() {
-        return String.format("ReadStatement[expression=%s]", expression.toString());
+        return "ReadStatement";
     }
 
     @Override

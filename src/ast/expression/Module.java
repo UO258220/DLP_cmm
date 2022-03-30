@@ -23,7 +23,7 @@ public class Module extends AbstractExpression {
 
     @Override
     public String toString() {
-        return String.format("Module[left=%s, right=%s]", left.toString(), right.toString());
+        return "Module";
     }
 
     @Override

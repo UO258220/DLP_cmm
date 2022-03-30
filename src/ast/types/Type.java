@@ -6,19 +6,19 @@ import ast.expression.Expression;
 import java.util.List;
 
 public interface Type extends ASTNode {
-    Type parenthesis(List<Type> argTypes);
-    void isWritable();
-    void isReadable();
-    void assign(Type type);
-    void asBoolean();
-    void isReturning(Type type);
-    Type squareBrackets(Type type);
-    Type dot(String field, Expression expression);
-    Type castTo(Type type, Expression expression);
-    Type minus();
-    Type not();
-    Type arithmetic(Type type);
-    Type module(Type type);
-    Type compare(Type type);
-    Type logical(Type type);
+    void asWritable();
+    void asReadable();
+    void asBoolean(int line, int column);
+    void assign(Type type, int line, int column);
+    void returnMatching(Type type, int line, int column);
+    Type parenthesis(List<Type> argTypes, int line, int column);
+    Type squareBrackets(Type type, int line, int column);
+    Type dot(String field, int line, int column);
+    Type castTo(Type type, int line, int column);
+    Type minus(int line, int column);
+    Type not(int line, int column);
+    Type arithmetic(Type type, int line, int column);
+    Type module(Type type, int line, int column);
+    Type compare(Type type, int line, int column);
+    Type logical(Type type, int line, int column);
 }

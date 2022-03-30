@@ -18,7 +18,7 @@ public class ReturnStatement extends AbstractStatement {
 
     @Override
     public String toString() {
-        return String.format("ReturnStatement[expression=%s]", expression.toString());
+        return "ReturnStatement";
     }
 
     @Override

@@ -32,11 +32,7 @@ public class RecordType extends AbstractType {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder("RecordType[fields=[");
-        for (RecordField f : fields) {
-            res.append(String.format("\n%s", f.toString()));
-        }
-        return res.append("]]").toString();
+        return "RecordType";
     }
 
     @Override
@@ -45,13 +41,12 @@ public class RecordType extends AbstractType {
     }
 
     @Override
-    public Type dot(String name, Expression expression) {
+    public Type dot(String name, int line, int column) {
         for (RecordField f : fields) {
             if (f.getName().equals(name)) {
                 return f.getType();
             }
         }
-        return new ErrorType(expression.getLine(), expression.getColumn(),
-                String.format("There is no field \"%s\" in struct type", name));
+        return new ErrorType(line, column, String.format("There is no field \"%s\" in struct type", name));
     }
 }

@@ -29,7 +29,7 @@ public class Logical extends AbstractExpression {
 
     @Override
     public String toString() {
-        return String.format("Logical[operator=%s, left=%s, right=%s]", operator, left.toString(), right.toString());
+        return String.format("Logical[operator=%s]", operator);
     }
 
     @Override

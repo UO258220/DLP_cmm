@@ -24,7 +24,7 @@ public class RecordField extends AbstractASTNode {
 
     @Override
     public String toString() {
-        return String.format("RecordField[type=%s, name=%s]", type.toString(), name);
+        return String.format("RecordField[name=%s]", name);
     }
 
     @Override

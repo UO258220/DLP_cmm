@@ -27,11 +27,7 @@ public class While extends AbstractStatement {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(String.format("WhileStatement[condition=%s, body=[", condition.toString()));
-        for (Statement s : body) {
-            res.append(String.format("\n%s", s.toString()));
-        }
-        return res.append("]]").toString();
+        return "WhileStatement";
     }
 
     @Override

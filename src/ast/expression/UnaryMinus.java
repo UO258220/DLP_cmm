@@ -17,7 +17,7 @@ public class UnaryMinus extends AbstractExpression {
 
     @Override
     public String toString() {
-        return String.format("UnaryMinus[expression=%s]", expression.toString());
+        return "UnaryMinus";
     }
 
     @Override

@@ -27,7 +27,7 @@ public class ArrayType extends AbstractType {
 
     @Override
     public String toString() {
-        return String.format("ArrayType[type=%s, size=%d]", innerType.toString(), size);
+        return String.format("ArrayType[size=%d]", size);
     }
 
     @Override
@@ -44,24 +44,24 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
-    public void assign(Type type) {
+    public void assign(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             // For now, the only thing to do here is to stop the creation of a new error
             return;
         }
         if (!this.equals(type)) {
-            new ErrorType(getLine(), getColumn(), String.format("type %s cannot be assigned to type %s", type, this));
+            new ErrorType(line, column, String.format("type %s cannot be assigned to type %s", type, this));
         }
     }
 
     @Override
-    public Type squareBrackets(Type type) {
+    public Type squareBrackets(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof IntegerType) {
             return innerType;
         }
-        return new ErrorType(getLine(), getColumn(), String.format("type %s cannot be used as index", type));
+        return new ErrorType(line, column, String.format("type %s cannot be used as index", type));
     }
 }

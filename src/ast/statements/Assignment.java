@@ -24,7 +24,7 @@ public class Assignment extends AbstractStatement {
 
     @Override
     public String toString() {
-        return String.format("Assignment[left=%s, right=%s]", left.toString(), right.toString());
+        return "Assignment";
     }
 
     @Override

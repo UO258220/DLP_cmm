@@ -11,67 +11,65 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
         super(line, column);
     }
 
-    public Type parenthesis(List<Type> argTypes) {
-        return new ErrorType(getLine(), getColumn(), String.format("type %s does not support invocation", this));
-    }
-
-    public void isWritable() {
-        new ErrorType(getLine(), getColumn(), String.format("type %s is not writable", this));
-    }
-
-    public void isReadable() {
-        new ErrorType(getLine(), getColumn(), String.format("type %s is not readable", this));
-    }
-
-    public void assign(Type type) {
-        new ErrorType(getLine(), getColumn(), String.format("type %s does not support assignment", this));
-    }
-
-    public void asBoolean() {
+    public void asWritable() {
         new ErrorType(getLine(), getColumn(),
-                String.format("expression of type %s cannot be used as boolean value", this));
+                String.format("type %s is not writable", this));
     }
 
-    public void isReturning(Type type) {
+    public void asReadable() {
         new ErrorType(getLine(), getColumn(),
-                String.format("expression of type %s is not allowed as a return value", this));
+                String.format("type %s is not readable", this));
     }
 
-    public Type squareBrackets(Type type) {
-        return new ErrorType(getLine(), getColumn(), String.format("type %s cannot be indexed", this));
+    public void asBoolean(int line, int column) {
+        new ErrorType(line, column, String.format("expression of type %s cannot be used as boolean value", this));
     }
 
-    public Type dot(String field, Expression expression) {
-        return new ErrorType(getLine(), getColumn(), String.format("type %s does not support field access", this));
+    public void assign(Type type, int line, int column) {
+        new ErrorType(line, column, String.format("type %s does not support assignment", this));
     }
 
-    public Type castTo(Type type, Expression expression) {
-        return new ErrorType(getLine(), getColumn(), String.format("type %s does not support cast", this));
+    public void returnMatching(Type type, int line, int column) {
+        new ErrorType(line, column, String.format("expression of type %s is not allowed as a return value", this));
     }
 
-    public Type minus() {
-        return new ErrorType(getLine(), getColumn(), String.format("type %s does not support unary minus", this));
+    public Type parenthesis(List<Type> argTypes, int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support invocation", this));
     }
 
-    public Type not() {
-        return new ErrorType(getLine(), getColumn(), String.format("type %s does not support negation", this));
+    public Type squareBrackets(Type type, int line, int column) {
+        return new ErrorType(line, column, String.format("type %s cannot be indexed", this));
     }
 
-    public Type arithmetic(Type type) {
-        return new ErrorType(getLine(), getColumn(),
-                String.format("type %s does not support arithmetic operations", this));
+    public Type dot(String field, int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support field access", this));
     }
 
-    public Type module(Type type) {
-        return new ErrorType(getLine(), getColumn(), String.format("type %s does not support module", this));
+    public Type castTo(Type type, int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support cast", this));
     }
 
-    public Type compare(Type type) {
-        return new ErrorType(getLine(), getColumn(), String.format("type %s does not support comparison", this));
+    public Type minus(int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support unary minus", this));
     }
 
-    public Type logical(Type type) {
-        return new ErrorType(getLine(), getColumn(),
-                String.format("type %s does not support logical operations", this));
+    public Type not(int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support negation", this));
+    }
+
+    public Type arithmetic(Type type, int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support arithmetic operations", this));
+    }
+
+    public Type module(Type type, int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support module", this));
+    }
+
+    public Type compare(Type type, int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support comparison", this));
+    }
+
+    public Type logical(Type type, int line, int column) {
+        return new ErrorType(line, column, String.format("type %s does not support logical operations", this));
     }
 }

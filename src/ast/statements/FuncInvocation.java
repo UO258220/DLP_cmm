@@ -30,11 +30,7 @@ public class FuncInvocation extends AbstractExpression implements Statement, Exp
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(String.format("WhileStatement[variable=%s, params=[", var.toString()));
-        for (Expression e : params) {
-            res.append(String.format("\n%s", e.toString()));
-        }
-        return res.append("]]").toString();
+        return "FuncInvocation";
     }
 
     @Override

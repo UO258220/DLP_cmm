@@ -1,16 +1,16 @@
 package ast.types;
 
-import ast.expression.Expression;
 import semantic.Visitor;
 
 public class IntegerType extends AbstractType {
+
     public IntegerType(int line, int column) {
         super(line, column);
     }
 
     @Override
     public String toString() {
-        return "IntegerType[]";
+        return "IntegerType";
     }
 
     @Override
@@ -24,123 +24,122 @@ public class IntegerType extends AbstractType {
     }
 
     @Override
-    public void isWritable() {
+    public void asWritable() {
         // No error thrown
     }
 
     @Override
-    public void isReadable() {
+    public void asReadable() {
         // No error thrown
     }
 
     @Override
-    public void assign(Type type) {
+    public void assign(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             // For now, the only thing to do here is to stop the creation of a new error
             return;
         }
         if (!this.equals(type)) {
-            new ErrorType(getLine(), getColumn(), String.format("type %s cannot be assigned to type %s", type, this));
+            new ErrorType(line, column, String.format("type %s cannot be assigned to type %s", type, this));
         }
     }
 
     @Override
-    public void asBoolean() {
+    public void asBoolean(int line, int column) {
         // No error thrown
     }
 
     @Override
-    public void isReturning(Type type) {
+    public void returnMatching(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             // For now, the only thing to do here is to stop the creation of a new error
             return;
         }
         if (!this.equals(type)) {
-            new ErrorType(getLine(), getColumn(), String.format("type %s cannot be returned, expected %s", this, type));
+            new ErrorType(line, column, String.format("type %s cannot be returned, expected %s", this, type));
         }
     }
 
     @Override
-    public Type castTo(Type type, Expression expression) {
+    public Type castTo(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof IntegerType) {
-            return this;
+            return new IntegerType(line, column);
         }
         if (type instanceof DoubleType) {
-            return new DoubleType(getLine(), getColumn());
+            return new DoubleType(line, column);
         }
         if (type instanceof CharType) {
-            return new CharType(getLine(), getColumn());
+            return new CharType(line, column);
         }
-        return new ErrorType(expression.getLine(), expression.getColumn(),
-                String.format("type %s cannot be casted to %s", this, type));
+        return new ErrorType(line, column, String.format("type %s cannot be casted to %s", this, type));
     }
 
     @Override
-    public Type minus() {
-        return this;
+    public Type minus(int line, int column) {
+        return new IntegerType(line, column);
     }
 
     @Override
-    public Type not() {
-        return this;
+    public Type not(int line, int column) {
+        return new IntegerType(line, column);
     }
 
     @Override
-    public Type arithmetic(Type type) {
+    public Type arithmetic(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof IntegerType) {
-            return this;
+            return new IntegerType(line, column);
         }
         if (type instanceof DoubleType) {
-            return new DoubleType(getLine(), getColumn());
+            return new DoubleType(line, column);
         }
         if (type instanceof CharType) {
-            return this;
+            return new IntegerType(line, column);
         }
-        return new ErrorType(getLine(), getColumn(),
+        return new ErrorType(line, column,
                 String.format("types %s and %s cannot be the terms of an arithmetic operation", this, type));
     }
 
     @Override
-    public Type module(Type type) {
+    public Type module(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof IntegerType) {
-            return this;
+            return new IntegerType(line, column);
         }
-        return new ErrorType(getLine(), getColumn(),
+        return new ErrorType(line, column,
                 String.format("types %s and %s cannot be the terms of a module operation", this, type));
     }
 
     @Override
-    public Type compare(Type type) {
+    public Type compare(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof IntegerType) {
-            return this;
+            return new IntegerType(line, column);
         }
         if (type instanceof DoubleType) {
-            return this;
+            return new IntegerType(line, column);
         }
-        return new ErrorType(getLine(), getColumn(), String.format("types %s and %s cannot be compared", this, type));
+        return new ErrorType(line, column, String.format("types %s and %s cannot be compared", this, type));
     }
 
     @Override
-    public Type logical(Type type) {
+    public Type logical(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
         }
         if (type instanceof IntegerType) {
-            return this;
+            return new IntegerType(line, column);
         }
-        return new ErrorType(getLine(), getColumn(),
+        return new ErrorType(line, column,
                 String.format("types %s and %s cannot be the terms of a logical operation", this, type));
     }
 

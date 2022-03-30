@@ -22,11 +22,7 @@ public class FuncDefinition extends AbstractDefinition {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(String.format("FuncDefinition[name=%s, type=%s, body=[", getName(), getType().toString()));
-        for (Statement s : statements) {
-            res.append(String.format("\n%s", s.toString()));
-        }
-        return res.append("]]").toString();
+        return String.format("FuncDefinition[name=%s]", getName());
     }
 
     @Override

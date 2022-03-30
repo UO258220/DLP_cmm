@@ -6,6 +6,9 @@ import ast.expression.Module;
 import ast.statements.*;
 import ast.types.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
 
     /**
@@ -113,14 +116,15 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
 
     @Override
     public Void visit(FuncInvocation funcInvocation, Type param) {
+        List<Type> argTypes = new ArrayList<Type>();
         funcInvocation.getVariable().accept(this, null);
-        funcInvocation.getParams().forEach(p -> p.accept(this, null));
+        funcInvocation.getParams().forEach(p -> {
+                p.accept(this, null);
+                argTypes.add(p.getType());
+        });
         funcInvocation.setLvalue(false);
-        funcInvocation.setType(
-                funcInvocation.getVariable().getType().parenthesis(
-                        funcInvocation.getParams().stream()
-                        .map(Expression::getType)
-                        .toList()
+        funcInvocation.setType(funcInvocation.getVariable().getType().parenthesis(
+                argTypes, funcInvocation.getLine(), funcInvocation.getColumn()
         ));
         return null;
     }
@@ -128,7 +132,7 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
     @Override
     public Void visit(WriteStatement writeStatement, Type param) {
         writeStatement.getExpression().accept(this, null);
-        writeStatement.getExpression().getType().isWritable();
+        writeStatement.getExpression().getType().asWritable();
         return null;
     }
 
@@ -138,7 +142,7 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         if (!readStatement.getExpression().getLvalue()) {
             new ErrorType(readStatement.getLine(), readStatement.getColumn(), "L-value required");
         }
-        readStatement.getExpression().getType().isReadable();
+        readStatement.getExpression().getType().asReadable();
         return null;
     }
 
@@ -150,33 +154,35 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
             new ErrorType(assignment.getLeft().getLine(), assignment.getLeft().getColumn(),
                     "L-value required");
         }
-        assignment.getLeft().getType().assign(assignment.getRight().getType());
+        assignment.getLeft().getType().assign(assignment.getRight().getType(),
+                assignment.getLine(), assignment.getColumn());
         return null;
     }
 
     @Override
     public Void visit(While whileStmt, Type param) {
         whileStmt.getCondition().accept(this, null);
+        whileStmt.getCondition().getType().asBoolean(whileStmt.getLine(), whileStmt.getColumn());
         whileStmt.getBody().forEach(st -> st.accept(this, param));
-        whileStmt.getCondition().getType().asBoolean();
         return null;
     }
 
     @Override
     public Void visit(IfElse ifElse, Type param) {
         ifElse.getCondition().accept(this, null);
+        ifElse.getCondition().getType().asBoolean(ifElse.getLine(), ifElse.getColumn());
         ifElse.getBody().forEach(st -> st.accept(this, param));
         if (ifElse.getElseBody() != null) {
             ifElse.getElseBody().forEach(st -> st.accept(this, param));
         }
-        ifElse.getCondition().getType().asBoolean();
         return null;
     }
 
     @Override
     public Void visit(ReturnStatement returnStatement, Type param) {
         returnStatement.getExpression().accept(this, null);
-        returnStatement.getExpression().getType().isReturning(param);
+        returnStatement.getExpression().getType().returnMatching(param,
+                returnStatement.getLine(), returnStatement.getColumn());
         return null;
     }
 
@@ -185,7 +191,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         indexing.getLeft().accept(this, null);
         indexing.getRight().accept(this, null);
         indexing.setLvalue(true);
-        indexing.setType(indexing.getLeft().getType().squareBrackets(indexing.getRight().getType()));
+        indexing.setType(indexing.getLeft().getType().squareBrackets(indexing.getRight().getType(),
+                indexing.getLine(), indexing.getColumn()));
         return null;
     }
 
@@ -194,7 +201,7 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         fieldAccess.getExpression().accept(this, null);
         fieldAccess.setLvalue(true);
         fieldAccess.setType(fieldAccess.getExpression().getType().dot(fieldAccess.getField(),
-                fieldAccess.getExpression()));
+                fieldAccess.getLine(), fieldAccess.getColumn()));
         return null;
     }
 
@@ -203,7 +210,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         cast.getCastType().accept(this, null);
         cast.getExpression().accept(this, null);
         cast.setLvalue(false);
-        cast.setType(cast.getExpression().getType().castTo(cast.getCastType(), cast.getExpression()));
+        cast.setType(cast.getExpression().getType().castTo(cast.getCastType(),
+                cast.getLine(), cast.getColumn()));
         return null;
     }
 
@@ -211,7 +219,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
     public Void visit(UnaryMinus unaryMinus, Type param) {
         unaryMinus.getExpression().accept(this, null);
         unaryMinus.setLvalue(false);
-        unaryMinus.setType(unaryMinus.getExpression().getType().minus());
+        unaryMinus.setType(unaryMinus.getExpression().getType().minus(
+                unaryMinus.getLine(), unaryMinus.getColumn()));
         return null;
     }
 
@@ -219,7 +228,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
     public Void visit(Negation negation, Type param) {
         negation.getExpression().accept(this, null);
         negation.setLvalue(false);
-        negation.setType(negation.getExpression().getType().not());
+        negation.setType(negation.getExpression().getType().not(
+                negation.getLine(), negation.getColumn()));
         return null;
     }
 
@@ -228,7 +238,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         arithmetic.getLeft().accept(this, null);
         arithmetic.getRight().accept(this, null);
         arithmetic.setLvalue(false);
-        arithmetic.setType(arithmetic.getLeft().getType().arithmetic(arithmetic.getRight().getType()));
+        arithmetic.setType(arithmetic.getLeft().getType().arithmetic(arithmetic.getRight().getType(),
+                arithmetic.getLine(), arithmetic.getColumn()));
         return null;
     }
 
@@ -237,7 +248,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         module.getLeft().accept(this, null);
         module.getRight().accept(this, null);
         module.setLvalue(false);
-        module.setType(module.getLeft().getType().module(module.getRight().getType()));
+        module.setType(module.getLeft().getType().module(module.getRight().getType(),
+                module.getLine(), module.getColumn()));
         return null;
     }
 
@@ -246,7 +258,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         comparison.getLeft().accept(this, null);
         comparison.getRight().accept(this, null);
         comparison.setLvalue(false);
-        comparison.setType(comparison.getLeft().getType().compare(comparison.getRight().getType()));
+        comparison.setType(comparison.getLeft().getType().compare(comparison.getRight().getType(),
+                comparison.getLine(), comparison.getColumn()));
         return null;
     }
 
@@ -255,7 +268,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         logical.getLeft().accept(this, null);
         logical.getRight().accept(this, null);
         logical.setLvalue(false);
-        logical.setType(logical.getLeft().getType().logical(logical.getRight().getType()));
+        logical.setType(logical.getLeft().getType().logical(logical.getRight().getType(),
+                logical.getLine(), logical.getColumn()));
         return null;
     }
 

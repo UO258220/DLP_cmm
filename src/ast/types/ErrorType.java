@@ -27,67 +27,67 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
-    public Type parenthesis(List<Type> argTypes) {
+    public Type parenthesis(List<Type> argTypes, int line, int column) {
         return this;
     }
 
     @Override
-    public Type squareBrackets(Type type) {
+    public Type squareBrackets(Type type, int line, int column) {
         return this;
     }
 
     @Override
-    public Type dot(String field, Expression expression) {
+    public Type dot(String field, int line, int column) {
         return this;
     }
 
     @Override
-    public Type castTo(Type type, Expression expression) {
+    public Type castTo(Type type, int line, int column) {
         return this;
     }
 
     @Override
-    public Type minus() {
+    public Type minus(int line, int column) {
         return this;
     }
 
     @Override
-    public Type not() {
+    public Type not(int line, int column) {
         return this;
     }
 
     @Override
-    public Type arithmetic(Type type) {
+    public Type arithmetic(Type type, int line, int column) {
         return this;
     }
 
     @Override
-    public Type module(Type type) {
+    public Type module(Type type, int line, int column) {
         return this;
     }
 
     @Override
-    public Type compare(Type type) {
+    public Type compare(Type type, int line, int column) {
         return this;
     }
 
     @Override
-    public Type logical(Type type) {
+    public Type logical(Type type, int line, int column) {
         return this;
     }
 
     @Override
-    public void isWritable() { }
+    public void asWritable() { }
 
     @Override
-    public void isReadable() { }
+    public void asReadable() { }
 
     @Override
-    public void assign(Type type) { }
+    public void assign(Type type, int line, int column) { }
 
     @Override
-    public void asBoolean() { }
+    public void asBoolean(int line, int column) { }
 
     @Override
-    public void isReturning(Type type) { }
+    public void returnMatching(Type type, int line, int column) { }
 }

@@ -12,7 +12,7 @@ public class VarDefinition extends AbstractDefinition implements Statement {
 
     @Override
     public String toString() {
-        return String.format("VarDefinition[name=%s, type=%s]", getName(), getType().toString());
+        return String.format("VarDefinition[name=%s]", getName());
     }
 
     @Override

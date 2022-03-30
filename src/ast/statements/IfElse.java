@@ -40,17 +40,7 @@ public class IfElse extends AbstractStatement {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(String.format("IfElseStatement[condition=%s, body=[", condition.toString()));
-        for (Statement s : body) {
-            res.append(String.format("\n%s", s.toString()));
-        }
-        if (elseBody != null) {
-            res.append("\n], elseBody=[");
-            for (Statement s : elseBody) {
-                res.append(String.format("\n%s", s.toString()));
-            }
-        }
-        return res.append("]]").toString();
+        return "IfElseStatement";
     }
 
     @Override

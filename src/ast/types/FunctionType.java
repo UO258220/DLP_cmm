@@ -27,11 +27,7 @@ public class FunctionType extends AbstractType {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(String.format("FunctionType[returnType=%s, params=[", returnType.toString()));
-        for (VarDefinition p : params) {
-            res.append(String.format("\n%s", p.toString()));
-        }
-        return res.append("]]").toString();
+        return "FunctionType";
     }
 
     @Override
@@ -40,16 +36,16 @@ public class FunctionType extends AbstractType {
     }
 
     @Override
-    public Type parenthesis(List<Type> argTypes) {
+    public Type parenthesis(List<Type> argTypes, int line, int column) {
         if (argTypes.size() != params.size()) {
-            return new ErrorType(getLine(), getColumn(), "unexpected number of arguments on invocation");
+            return new ErrorType(line, column, "unexpected number of arguments on invocation");
         }
         for (int i = 0; i < params.size(); i++) {
             if (argTypes.get(i) instanceof ErrorType) {
                 return argTypes.get(i);
             }
             if (!params.get(i).getType().equals(argTypes.get(i))) {
-                return new ErrorType(getLine(), getColumn(),
+                return new ErrorType(line, column,
                         String.format("type of argument number %d mismatched on invocation", i + 1));
             }
         }

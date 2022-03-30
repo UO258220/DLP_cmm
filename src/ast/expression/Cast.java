@@ -24,7 +24,7 @@ public class Cast extends AbstractExpression {
 
     @Override
     public String toString() {
-        return String.format("Cast[expression=%s, type=%s]", expression.toString(), castType.toString());
+        return "Cast";
     }
 
     @Override
