@@ -13,19 +13,6 @@ public class ArrayType extends AbstractType {
         this.innerType = innerType;
     }
 
-/**
-    public ArrayType(int line, int column, List<Integer> sizes, Type baseType) {
-        super(line, column);
-        this.size = sizes.get(0);
-        if (sizes.size() > 1) {
-            this.innerType = new ArrayType(line, column, sizes.subList(1, sizes.size()), baseType);
-        }
-        else {
-            this.innerType = baseType;
-        }
-    }
-**/
-
     public int getSize() {
         return size;
     }
@@ -44,7 +31,37 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o instanceof ArrayType that) {
+            return this.getInnerType().equals(that.getInnerType()) && this.getSize() == that.getSize();
+        }
+        return false;
+    }
+
+    @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
+    }
+
+    @Override
+    public void assign(Type type) {
+        if (type instanceof ErrorType) {
+            // For now, the only thing to do here is to stop the creation of a new error
+            return;
+        }
+        if (!this.equals(type)) {
+            new ErrorType(getLine(), getColumn(), String.format("type %s cannot be assigned to type %s", type, this));
+        }
+    }
+
+    @Override
+    public Type squareBrackets(Type type) {
+        if (type instanceof ErrorType) {
+            return type;
+        }
+        if (type instanceof IntegerType) {
+            return innerType;
+        }
+        return new ErrorType(getLine(), getColumn(), String.format("type %s cannot be used as index", type));
     }
 }

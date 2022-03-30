@@ -43,4 +43,14 @@ public class RecordType extends AbstractType {
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
     }
+
+    @Override
+    public Type dot(String name) {
+        for (RecordField f : fields) {
+            if (f.getName().equals(name)) {
+                return f.getType();
+            }
+        }
+        return new ErrorType(getLine(), getColumn(), String.format("There is no field \"%s\" in struct type", name));
+    }
 }

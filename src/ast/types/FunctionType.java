@@ -38,4 +38,21 @@ public class FunctionType extends AbstractType {
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
     }
+
+    @Override
+    public Type parenthesis(List<Type> argTypes) {
+        if (argTypes.size() != params.size()) {
+            return new ErrorType(getLine(), getColumn(), "unexpected number of arguments on invocation");
+        }
+        for (int i = 0; i < params.size(); i++) {
+            if (argTypes.get(i) instanceof ErrorType) {
+                return argTypes.get(i);
+            }
+            if (!params.get(i).getType().equals(argTypes.get(i))) {
+                return new ErrorType(getLine(), getColumn(),
+                        String.format("type of argument number %d mismatched on invocation", i + 1));
+            }
+        }
+        return returnType;
+    }
 }
