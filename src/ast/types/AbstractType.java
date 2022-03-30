@@ -1,6 +1,7 @@
 package ast.types;
 
 import ast.AbstractASTNode;
+import ast.expression.Expression;
 
 import java.util.List;
 
@@ -40,11 +41,11 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
         return new ErrorType(getLine(), getColumn(), String.format("type %s cannot be indexed", this));
     }
 
-    public Type dot(String field) {
+    public Type dot(String field, Expression expression) {
         return new ErrorType(getLine(), getColumn(), String.format("type %s does not support field access", this));
     }
 
-    public Type castTo(Type type) {
+    public Type castTo(Type type, Expression expression) {
         return new ErrorType(getLine(), getColumn(), String.format("type %s does not support cast", this));
     }
 

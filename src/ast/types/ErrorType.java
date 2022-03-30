@@ -1,5 +1,6 @@
 package ast.types;
 
+import ast.expression.Expression;
 import errorhandler.ErrorHandler;
 import semantic.Visitor;
 
@@ -36,12 +37,12 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
-    public Type dot(String field) {
+    public Type dot(String field, Expression expression) {
         return this;
     }
 
     @Override
-    public Type castTo(Type type) {
+    public Type castTo(Type type, Expression expression) {
         return this;
     }
 

@@ -1,6 +1,6 @@
 package ast.types;
 
-import errorhandler.ErrorHandler;
+import ast.expression.Expression;
 import semantic.Visitor;
 
 import java.util.ArrayList;
@@ -45,12 +45,13 @@ public class RecordType extends AbstractType {
     }
 
     @Override
-    public Type dot(String name) {
+    public Type dot(String name, Expression expression) {
         for (RecordField f : fields) {
             if (f.getName().equals(name)) {
                 return f.getType();
             }
         }
-        return new ErrorType(getLine(), getColumn(), String.format("There is no field \"%s\" in struct type", name));
+        return new ErrorType(expression.getLine(), expression.getColumn(),
+                String.format("There is no field \"%s\" in struct type", name));
     }
 }

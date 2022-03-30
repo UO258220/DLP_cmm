@@ -114,7 +114,9 @@ public abstract class AbstractVisitor<TP,TR> implements Visitor<TP,TR> {
     public TR visit(IfElse ifElse, TP param) {
         ifElse.getCondition().accept(this, null);
         ifElse.getBody().forEach(st -> st.accept(this, null));
-        ifElse.getElseBody().forEach(st -> st.accept(this, null));
+        if (ifElse.getElseBody() != null) {
+            ifElse.getElseBody().forEach(st -> st.accept(this, null));
+        }
         return null;
     }
 

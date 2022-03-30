@@ -136,7 +136,7 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
     public Void visit(ReadStatement readStatement, Type param) {
         readStatement.getExpression().accept(this, null);
         if (!readStatement.getExpression().getLvalue()) {
-            new ErrorType(readStatement.getLine(), readStatement.getColumn(), "L-value required.");
+            new ErrorType(readStatement.getLine(), readStatement.getColumn(), "L-value required");
         }
         readStatement.getExpression().getType().isReadable();
         return null;
@@ -148,7 +148,7 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         assignment.getRight().accept(this, null);
         if (!assignment.getLeft().getLvalue()) {
             new ErrorType(assignment.getLeft().getLine(), assignment.getLeft().getColumn(),
-                    "L-value required.");
+                    "L-value required");
         }
         assignment.getLeft().getType().assign(assignment.getRight().getType());
         return null;
@@ -166,7 +166,9 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
     public Void visit(IfElse ifElse, Type param) {
         ifElse.getCondition().accept(this, null);
         ifElse.getBody().forEach(st -> st.accept(this, param));
-        ifElse.getElseBody().forEach(st -> st.accept(this, param));
+        if (ifElse.getElseBody() != null) {
+            ifElse.getElseBody().forEach(st -> st.accept(this, param));
+        }
         ifElse.getCondition().getType().asBoolean();
         return null;
     }
@@ -191,7 +193,8 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
     public Void visit(FieldAccess fieldAccess, Type param) {
         fieldAccess.getExpression().accept(this, null);
         fieldAccess.setLvalue(true);
-        fieldAccess.setType(fieldAccess.getExpression().getType().dot(fieldAccess.getField()));
+        fieldAccess.setType(fieldAccess.getExpression().getType().dot(fieldAccess.getField(),
+                fieldAccess.getExpression()));
         return null;
     }
 
@@ -200,7 +203,7 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         cast.getCastType().accept(this, null);
         cast.getExpression().accept(this, null);
         cast.setLvalue(false);
-        cast.setType(cast.getExpression().getType().castTo(cast.getType()));
+        cast.setType(cast.getExpression().getType().castTo(cast.getCastType(), cast.getExpression()));
         return null;
     }
 

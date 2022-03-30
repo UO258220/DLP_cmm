@@ -1,5 +1,6 @@
 package ast.types;
 
+import ast.expression.Expression;
 import semantic.Visitor;
 
 public class DoubleType extends AbstractType {
@@ -55,7 +56,7 @@ public class DoubleType extends AbstractType {
     }
 
     @Override
-    public Type castTo(Type type) {
+    public Type castTo(Type type, Expression expression) {
         if (type instanceof ErrorType) {
             return type;
         }
@@ -65,7 +66,8 @@ public class DoubleType extends AbstractType {
         if (type instanceof IntegerType) {
             return new IntegerType(getLine(), getColumn());
         }
-        return new ErrorType(getLine(), getColumn(), String.format("type %s cannot be casted to %s", this, type));
+        return new ErrorType(expression.getLine(), expression.getColumn(),
+                String.format("type %s cannot be casted to %s", this, type));
     }
 
     @Override
