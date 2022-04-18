@@ -49,4 +49,10 @@ public class RecordType extends AbstractType {
         }
         return new ErrorType(line, column, String.format("There is no field \"%s\" in struct type", name));
     }
+
+    @Override
+    public int numberOfBytes() {
+        return this.fields.stream().mapToInt(rf -> rf.getType().numberOfBytes()).sum();
+    }
+
 }

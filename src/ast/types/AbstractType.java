@@ -72,4 +72,8 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public Type logical(Type type, int line, int column) {
         return new ErrorType(line, column, String.format("type %s does not support logical operations", this));
     }
+
+    public int numberOfBytes() {
+        return 0;
+    }
 }

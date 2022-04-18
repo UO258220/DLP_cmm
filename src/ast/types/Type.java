@@ -21,4 +21,6 @@ public interface Type extends ASTNode {
     Type module(Type type, int line, int column);
     Type compare(Type type, int line, int column);
     Type logical(Type type, int line, int column);
+
+    int numberOfBytes();
 }

@@ -4,6 +4,8 @@ import semantic.Visitor;
 
 public class DoubleType extends AbstractType {
 
+    private static final int DOUBLE_BYTES = 4;
+
     public DoubleType(int line, int column) {
         super(line, column);
     }
@@ -101,5 +103,10 @@ public class DoubleType extends AbstractType {
             return new IntegerType(line, column);
         }
         return new ErrorType(line, column, String.format("types %s and %s cannot be compared", this, type));
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return DOUBLE_BYTES;
     }
 }

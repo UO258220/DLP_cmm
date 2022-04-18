@@ -64,4 +64,9 @@ public class ArrayType extends AbstractType {
         }
         return new ErrorType(line, column, String.format("type %s cannot be used as index", type));
     }
+
+    @Override
+    public int numberOfBytes() {
+        return this.size * this.innerType.numberOfBytes();
+    }
 }

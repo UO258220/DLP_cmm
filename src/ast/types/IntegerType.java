@@ -4,6 +4,8 @@ import semantic.Visitor;
 
 public class IntegerType extends AbstractType {
 
+    private static final int INT_BYTES = 2;
+
     public IntegerType(int line, int column) {
         super(line, column);
     }
@@ -141,6 +143,11 @@ public class IntegerType extends AbstractType {
         }
         return new ErrorType(line, column,
                 String.format("types %s and %s cannot be the terms of a logical operation", this, type));
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return INT_BYTES;
     }
 
 }

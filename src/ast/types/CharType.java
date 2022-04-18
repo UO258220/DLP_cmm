@@ -4,6 +4,8 @@ import semantic.Visitor;
 
 public class CharType extends AbstractType {
 
+    private static final int CHAR_BYTES = 1;
+
     public CharType(int line, int column) {
         super(line, column);
     }
@@ -93,5 +95,10 @@ public class CharType extends AbstractType {
             return new IntegerType(line, column);
         }
         return new ErrorType(line, column, String.format("types %s and %s cannot be compared", this, type));
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return CHAR_BYTES;
     }
 }

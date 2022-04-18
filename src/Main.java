@@ -1,3 +1,4 @@
+import codegeneration.OffsetVisitor;
 import errorhandler.ErrorHandler;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
@@ -28,6 +29,7 @@ public class Main {
 		Program ast = parser.program().ast;
 		ast.accept(new IdentificationVisitor(), null);
 		ast.accept(new TypeCheckVisitor(), null);
+		ast.accept(new OffsetVisitor(), null);
 		if (ErrorHandler.getInstance().anyErrors())
 			ErrorHandler.getInstance().showErrors(System.err);
 		else {
