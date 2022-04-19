@@ -71,4 +71,5 @@ public interface Visitor<TP,TR> {
     public TR visit(CharLiteral charLiteral, TP param);
 
     public TR visit(RealLiteral realLiteral, TP param);
+
 }

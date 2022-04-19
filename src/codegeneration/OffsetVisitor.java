@@ -11,7 +11,7 @@ import semantic.AbstractVisitor;
 public class OffsetVisitor extends AbstractVisitor<Boolean, Void> {
 
     /**
-     * Rules for offset computation (AG)
+     * Rules for offset computation
      *
      *
      * Global variables

@@ -68,6 +68,9 @@ public class CharType extends AbstractType {
         if (type instanceof IntegerType) {
             return new IntegerType(line, column);
         }
+        if (type instanceof DoubleType) {
+            return new DoubleType(line, column);
+        }
         return new ErrorType(line, column, String.format("type %s cannot be casted to %s", this, type));
     }
 
@@ -77,9 +80,6 @@ public class CharType extends AbstractType {
             return type;
         }
         if (type instanceof CharType) {
-            return new IntegerType(line, column);
-        }
-        if (type instanceof IntegerType) {
             return new IntegerType(line, column);
         }
         return new ErrorType(line, column,

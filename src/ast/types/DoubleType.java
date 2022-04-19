@@ -62,11 +62,14 @@ public class DoubleType extends AbstractType {
         if (type instanceof ErrorType) {
             return type;
         }
-        if (type instanceof DoubleType) {
-            return new DoubleType(line, column);
+        if (type instanceof CharType) {
+            return new CharType(line, column);
         }
         if (type instanceof IntegerType) {
             return new IntegerType(line, column);
+        }
+        if (type instanceof DoubleType) {
+            return new DoubleType(line, column);
         }
         return new ErrorType(line, column, String.format("type %s cannot be casted to %s", this, type));
     }
@@ -84,9 +87,6 @@ public class DoubleType extends AbstractType {
         if (type instanceof DoubleType) {
             return new DoubleType(line, column);
         }
-        if (type instanceof IntegerType) {
-            return new DoubleType(line, column);
-        }
         return new ErrorType(line, column,
                 String.format("types %s and %s cannot be the terms of an arithmetic operation", this, type));
     }
@@ -97,9 +97,6 @@ public class DoubleType extends AbstractType {
             return type;
         }
         if (type instanceof DoubleType) {
-            return new IntegerType(line, column);
-        }
-        if (type instanceof IntegerType) {
             return new IntegerType(line, column);
         }
         return new ErrorType(line, column, String.format("types %s and %s cannot be compared", this, type));
