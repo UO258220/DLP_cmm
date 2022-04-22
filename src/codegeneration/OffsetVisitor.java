@@ -49,7 +49,7 @@ public class OffsetVisitor extends AbstractVisitor<Boolean, Void> {
 
     private int globalBytesSum = 0;
     private int localsBytesSum = 0;
-    private int paramsBytesSum = 4;
+    private int paramsBytesSum = 0;
 
     @Override
     public Void visit(VarDefinition varDefinition, Boolean isParam) {
@@ -62,12 +62,12 @@ public class OffsetVisitor extends AbstractVisitor<Boolean, Void> {
         }
         // LOCAL VARIABLE
         else if (isParam == null || !isParam) {
-            localsBytesSum -= varDefinition.getType().numberOfBytes();
-            varDefinition.setOffset(localsBytesSum);
+            localsBytesSum += varDefinition.getType().numberOfBytes();
+            varDefinition.setOffset(-localsBytesSum);
         }
         // PARAMETER
         else {
-            varDefinition.setOffset(paramsBytesSum);
+            varDefinition.setOffset(4 + paramsBytesSum);
             paramsBytesSum += varDefinition.getType().numberOfBytes();
         }
         return null;
@@ -83,7 +83,7 @@ public class OffsetVisitor extends AbstractVisitor<Boolean, Void> {
 
     @Override
     public Void visit(FunctionType functionType, Boolean isParam) {
-        paramsBytesSum = 4;
+        paramsBytesSum = 0;
         for (int i = functionType.getParams().size() - 1 ; i >= 0 ; i--) {
             functionType.getParams().get(i).accept(this, true);
         }

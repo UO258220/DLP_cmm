@@ -12,7 +12,7 @@ public class IntegerType extends AbstractType {
 
     @Override
     public String toString() {
-        return "IntegerType";
+        return "int";
     }
 
     @Override

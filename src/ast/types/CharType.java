@@ -12,7 +12,7 @@ public class CharType extends AbstractType {
 
     @Override
     public String toString() {
-        return "CharType";
+        return "char";
     }
 
     @Override
