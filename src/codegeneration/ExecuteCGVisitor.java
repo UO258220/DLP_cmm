@@ -12,11 +12,11 @@ public class ExecuteCGVisitor {
      * Function definition
      * execute[[ FuncDefinition: definition -> type ID statement* ]] =
      *      ID <:>
+     *      <enter> definition.localsBytesSum
      *      <' * Parameters>
      *      type.definitions.forEach( d -> execute[[ d ]] )
      *      <' * Local variables>
      *      statement*.forEach( s -> execute[[ s ]] )
-     *      <enter> definition.localsBytesSum //TODO
      *      if ( type.returnType instanceof VoidType ) {
      *          <ret 0, > definition.localsBytesSum <, > definition.type.paramsBytesSum
      *      }
