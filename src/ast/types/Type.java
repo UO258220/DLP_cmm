@@ -23,4 +23,5 @@ public interface Type extends ASTNode {
     Type logical(Type type, int line, int column);
 
     int numberOfBytes();
+    char getSuffix();
 }

@@ -11,6 +11,16 @@ import semantic.Visitor;
 
 public abstract class AbstractCGVisitor<TP,TR> implements Visitor<TP,TR> {
 
+    private CodeGenerator cg;
+
+    public AbstractCGVisitor(CodeGenerator cg) {
+        this.cg = cg;
+    }
+
+    public CodeGenerator getCG() {
+        return cg;
+    }
+
     @Override
     public TR visit(Program program, TP param) {
         throw new IllegalStateException();

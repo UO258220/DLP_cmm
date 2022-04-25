@@ -12,6 +12,14 @@ public class VarDefinition extends AbstractDefinition implements Statement {
         super(line, column, name, type);
     }
 
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public int getOffset() {
+        return this.offset;
+    }
+
     @Override
     public String toString() {
         return String.format("VarDefinition[name=%s]", getName());
@@ -20,9 +28,5 @@ public class VarDefinition extends AbstractDefinition implements Statement {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
-    }
-    
-    public void setOffset(int offset) {
-        this.offset = offset;
     }
 }

@@ -141,4 +141,9 @@ public class IntegerType extends AbstractType {
         return INT_BYTES;
     }
 
+    @Override
+    public char getSuffix() {
+        return 'i';
+    }
+
 }

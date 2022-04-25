@@ -78,6 +78,7 @@ public class OffsetVisitor extends AbstractVisitor<Boolean, Void> {
         localsBytesSum = 0;
         funcDefinition.getType().accept(this, isParam);
         funcDefinition.getStatements().forEach(st -> st.accept(this, isParam));
+        funcDefinition.setLocalsBytesSum(localsBytesSum);
         return null;
     }
 

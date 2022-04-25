@@ -1,6 +1,9 @@
 package codegeneration;
 
-public class AddressCGVisitor {
+import ast.VarDefinition;
+import ast.expression.Variable;
+
+public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     /**
      * Rules for address code generation
@@ -16,5 +19,26 @@ public class AddressCGVisitor {
      *          <addi>
      *      }
      */
+    private ValueCGVisitor valueCGVisitor;
+
+    public AddressCGVisitor(CodeGenerator cg) {
+        super(cg);
+    }
+
+    public void setValueCGVisitor(ValueCGVisitor valueCGVisitor) {
+        this.valueCGVisitor = valueCGVisitor;
+    }
+
+    @Override
+    public Void visit(Variable variable, Void param) {
+        if( variable.getDefinition().getScope() == 0){
+            getCG().pusha(((VarDefinition)variable.getDefinition()).getOffset());
+        } else{
+            getCG().pushBP();
+            getCG().pushi(((VarDefinition)variable.getDefinition()).getOffset());
+            getCG().add('i');
+        }
+        return null;
+    }
 
 }

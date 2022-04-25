@@ -101,4 +101,9 @@ public class CharType extends AbstractType {
     public int numberOfBytes() {
         return CHAR_BYTES;
     }
+
+    @Override
+    public char getSuffix() {
+        return 'b';
+    }
 }

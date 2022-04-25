@@ -106,4 +106,9 @@ public class DoubleType extends AbstractType {
     public int numberOfBytes() {
         return DOUBLE_BYTES;
     }
+
+    @Override
+    public char getSuffix() {
+        return 'f';
+    }
 }
