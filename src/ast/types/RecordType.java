@@ -20,14 +20,21 @@ public class RecordType extends AbstractType {
     }
 
     public void addField(RecordField field) {
-        for (RecordField f : fields) {
-            if (field.getName().equals(f.getName())) {
-                new ErrorType(field.getLine(), field.getColumn(),
-                        String.format("Duplicated field \"%s\" in struct", field.getName()));
-                return;
-            }
+        if (getField(field.getName()) != null) {
+            new ErrorType(field.getLine(), field.getColumn(),
+                    String.format("Duplicated field \"%s\" in struct", field.getName()));
+            return;
         }
         fields.add(field);
+    }
+
+    public RecordField getField(String name) {
+        for (RecordField f : fields) {
+            if (f.getName().equals(name)) {
+                return f;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -42,12 +49,10 @@ public class RecordType extends AbstractType {
 
     @Override
     public Type dot(String name, int line, int column) {
-        for (RecordField f : fields) {
-            if (f.getName().equals(name)) {
-                return f.getType();
-            }
-        }
-        return new ErrorType(line, column, String.format("There is no field \"%s\" in struct type", name));
+        Type fieldType = getField(name).getType();
+        return fieldType == null ?
+                new ErrorType(line, column, String.format("There is no field \"%s\" in struct type", name)) :
+                fieldType;
     }
 
     @Override

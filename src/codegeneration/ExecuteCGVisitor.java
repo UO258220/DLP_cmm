@@ -1,10 +1,7 @@
 package codegeneration;
 
 import ast.*;
-import ast.statements.Assignment;
-import ast.statements.ReadStatement;
-import ast.statements.Statement;
-import ast.statements.WriteStatement;
+import ast.statements.*;
 import ast.types.FunctionType;
 import ast.types.VoidType;
 
@@ -58,6 +55,28 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
      *      address[[ expression1 ]]
      *      value[[ expression2 ]]
      *      <store> expression1.type.suffix();
+     *
+     *
+     * While
+     * execute[[ While: statement -> expression statement* ]] =
+     *      String conditionLabel = cg.nextlabel(), exitLabel = cg.nextLabel();
+     *      conditionLabel <:>
+     *      value[[ expression ]]
+     *      <jz > exitLabel
+     *      statement*.forEach( s -> execute[[ s ]] )
+     *      <jmp > conditionLabel
+     *      exitLabel <:>
+     *
+     * IfElse
+     * execute[[ IfElse: statement1 -> expression statement2* statement3* ]] =
+     *      String elseLabel = cg.nextlabel(), exitLabel = cg.nextLabel():
+     *      value[[ expression ]]
+     *      <jz > elseLabel
+     *      statement2*.forEach( s -> execute[[ s ]] )
+     *      <jmp > exitLabel
+     *      elseLabel <:>
+     *      statement3*.forEach( s -> execute[[ s ]] )
+     *      exitLabel <:>
      */
     private ValueCGVisitor valueCGVisitor;
     private AddressCGVisitor addressCGVisitor;
@@ -86,7 +105,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         FunctionType ftype = (FunctionType)funcDefinition.getType();
 
         getCG().line(funcDefinition.getLine());
-        getCG().functionLabel(funcDefinition.getName());
+        getCG().label(funcDefinition.getName());
         getCG().comment("Parameters");
         ftype.getParams().forEach( p -> p.accept(this,null) );
 
@@ -143,6 +162,31 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         assignment.getLeft().accept(addressCGVisitor, null);
         assignment.getRight().accept(valueCGVisitor, null);
         getCG().store(assignment.getLeft().getType().getSuffix());
+        return null;
+    }
+
+    @Override
+    public Void visit(While whileStatement, Void param) {
+        String conditionLabel = getCG().nextLabel(), exitLabel = getCG().nextLabel();
+        getCG().label(conditionLabel);
+        whileStatement.getCondition().accept(valueCGVisitor, null);
+        getCG().jz(exitLabel);
+        whileStatement.getBody().forEach( s -> s.accept(this, null) );
+        getCG().jmp(conditionLabel);
+        getCG().label(exitLabel);
+        return null;
+    }
+
+    @Override
+    public Void visit(IfElse ifElse, Void param) {
+        String elseLabel = getCG().nextLabel(), exitLabel = getCG().nextLabel();
+        ifElse.getCondition().accept(valueCGVisitor, null);
+        getCG().jz(elseLabel);
+        ifElse.getBody().forEach( s -> s.accept(this, null) );
+        getCG().jmp(exitLabel);
+        getCG().label(elseLabel);
+        ifElse.getElseBody().forEach( s -> s.accept(this, null) );
+        getCG().label(exitLabel);
         return null;
     }
 

@@ -24,6 +24,14 @@ public class RecordField extends AbstractASTNode {
         return type;
     }
 
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
     @Override
     public String toString() {
         return String.format("RecordField[name=%s]", name);
@@ -32,9 +40,5 @@ public class RecordField extends AbstractASTNode {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
     }
 }

@@ -20,10 +20,15 @@ public class CodeGenerator {
             this.err = System.err;
         }
         catch (FileNotFoundException e) {
-            err.printf("--- FILE %s NOT FOUND ---%s", inputFilename);
+            err.println(String.format("--- FILE %s NOT FOUND ---", inputFilename));
         }
         this.out.println(String.format("\n#source \"%s\"\n", inputFilename));
         this.out.flush();
+    }
+
+    public String nextLabel() {
+        // TODO
+        return null;
     }
 
     public void line(int line) {
@@ -43,7 +48,7 @@ public class CodeGenerator {
         this.out.flush();
     }
 
-    public void functionLabel(String name) {
+    public void label(String name) {
         this.out.println(String.format("\n %s:", name));
         this.out.flush();
     }
@@ -146,7 +151,7 @@ public class CodeGenerator {
     }
 
     public void pushf(double value) {
-        this.out.println(String.format("\tpushf\t%.1f", value));
+        this.out.println("\tpushf\t" + value);
         this.out.flush();
     }
 
@@ -282,6 +287,16 @@ public class CodeGenerator {
 
     public void i2b() {
         this.out.println("\ti2b");
+        this.out.flush();
+    }
+
+    public void jmp(String label) {
+        this.out.println(String.format("\tjmp\t%s", label));
+        this.out.flush();
+    }
+
+    public void jz(String label) {
+        this.out.println(String.format("\tjz\t%s", label));
         this.out.flush();
     }
 }

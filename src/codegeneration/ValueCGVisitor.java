@@ -54,27 +54,27 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
      * Comparison
      * value[[ Comparison: expression1 -> expression2 (">" | "<" | ">=" | "<=" | "==" | "!=") expression3 ]] =
      *      value[[ expression2 ]]
-     *      expression2.type.promoteToInt()
+     *      char suffix = expression2.type.promoteToInt()
      *      value[[ expression3 ]]
      *      expression3.type.promoteToInt()
      *      switch (expression1.operator) {
      *          case ">":
-     *              <gt> expression2.type.suffix()
+     *              <gt> suffix
      *              break
      *          case "<":
-     *              <gt> expression2.type.suffix()
+     *              <gt> suffix
      *              break
      *          case ">=":
-     *              <gt> expression2.type.suffix()
+     *              <gt> suffix
      *              break
      *          case "<=":
-     *              <gt> expression2.type.suffix()
+     *              <gt> suffix
      *              break
      *          case "==":
-     *              <gt> expression2.type.suffix()
+     *              <gt> suffix
      *              break
      *          case "!=":
-     *              <gt> expression2.type.suffix()
+     *              <gt> suffix
      *              break
      *      }
      *
@@ -97,6 +97,18 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
      * value[[ Cast: expression1 -> type expression2 ]] =
      *      value[[ expression2 ]]
      *      expression2.type.convertTo(expression1.type)
+     *
+     *
+     * Indexing
+     * value[[ Indexing: expression1 -> expression2 expression3 ]] =
+     *      address[[ expression1 ]]
+     *      <load> expression1.type.suffix()
+     *
+     *
+     * FieldAccess
+     * value[[ FieldAccess: expression1 -> expression2 ID ]] =
+     *      address[[ expression1 ]]
+     *      <load> expression1.type.suffix()
      */
     private AddressCGVisitor addressCGVisitor;
 
@@ -182,6 +194,20 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(Negation negation, Void param) {
         negation.getExpression().accept(this, null);
         getCG().not();
+        return null;
+    }
+
+    @Override
+    public Void visit(Indexing indexing, Void param) {
+        indexing.accept(addressCGVisitor, null);
+        getCG().load(indexing.getType().getSuffix());
+        return null;
+    }
+
+    @Override
+    public Void visit(FieldAccess fieldAccess, Void param) {
+        fieldAccess.accept(addressCGVisitor, null);
+        getCG().load(fieldAccess.getType().getSuffix());
         return null;
     }
 }
