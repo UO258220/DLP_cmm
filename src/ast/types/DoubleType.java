@@ -1,5 +1,6 @@
 package ast.types;
 
+import codegeneration.CodeGenerator;
 import semantic.Visitor;
 
 public class DoubleType extends AbstractType {
@@ -110,5 +111,21 @@ public class DoubleType extends AbstractType {
     @Override
     public char getSuffix() {
         return 'f';
+    }
+
+    @Override
+    public void convertTo(Type type, CodeGenerator cg) {
+        if (type instanceof DoubleType) {
+            return;
+        }
+        cg.f2i();
+        if (type instanceof CharType) {
+            cg.i2b();
+        }
+    }
+
+    @Override
+    public char promoteToInt(CodeGenerator cg) {
+        return getSuffix();
     }
 }

@@ -70,12 +70,6 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-    /* FieldAccess
-     * address[[ FieldAccess: expression1 -> expression2 ID ]] =
-     *      address[[ expression2 ]]
-     *      <pushi > ((RecordType)expression2.type).getField(ID).offset
-     *      <addi>
-     */
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
         fieldAccess.getExpression().accept(this, null);

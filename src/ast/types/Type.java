@@ -2,6 +2,7 @@ package ast.types;
 
 import ast.ASTNode;
 import ast.expression.Expression;
+import codegeneration.CodeGenerator;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface Type extends ASTNode {
 
     int numberOfBytes();
     char getSuffix();
+    void convertTo(Type type, CodeGenerator cg);
+    char promoteToInt(CodeGenerator cg);
 }

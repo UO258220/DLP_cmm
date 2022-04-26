@@ -2,6 +2,7 @@ package ast.types;
 
 import ast.AbstractASTNode;
 import ast.expression.Expression;
+import codegeneration.CodeGenerator;
 
 import java.util.List;
 
@@ -74,7 +75,18 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     public int numberOfBytes() {
-        return 0;
+        throw new IllegalStateException("Number of bytes - unsupported");
     }
-    public char getSuffix() { return 'x'; }
+
+    public char getSuffix() {
+        throw new IllegalStateException("Suffix - unsupported");
+    }
+
+    public void convertTo(Type type, CodeGenerator cg) {
+        throw new IllegalStateException("Conversion - unsupported");
+    }
+
+    public char promoteToInt(CodeGenerator cg) {
+        throw new IllegalStateException("Integer promotion - unsupported");
+    }
 }

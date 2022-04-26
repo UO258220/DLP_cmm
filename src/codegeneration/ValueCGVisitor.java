@@ -148,9 +148,9 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Arithmetic arithmetic, Void param) {
         arithmetic.getLeft().accept(this, null);
-        getCG().convertTo(arithmetic.getLeft().getType(), arithmetic.getType());
+        arithmetic.getLeft().getType().convertTo(arithmetic.getType(), getCG());
         arithmetic.getRight().accept(this, null);
-        getCG().convertTo(arithmetic.getRight().getType(), arithmetic.getType());
+        arithmetic.getRight().getType().convertTo(arithmetic.getType(), getCG());
         getCG().arithmetic(arithmetic.getOperator(), arithmetic.getType().getSuffix());
         return null;
     }
@@ -158,9 +158,9 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Module module, Void param) {
         module.getLeft().accept(this, null);
-        getCG().convertTo(module.getLeft().getType(), module.getType());
+        module.getLeft().getType().convertTo(module.getType(), getCG());
         module.getRight().accept(this, null);
-        getCG().convertTo(module.getRight().getType(), module.getType());
+        module.getRight().getType().convertTo(module.getType(), getCG());
         getCG().module(module.getType().getSuffix());
         return null;
     }
@@ -168,10 +168,10 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Comparison comparison, Void param) {
         comparison.getLeft().accept(this, null);
-        char suffix = getCG().promoteToInt(comparison.getLeft().getType());
+        comparison.getLeft().getType().promoteToInt(getCG());
         comparison.getRight().accept(this, null);
-        getCG().promoteToInt(comparison.getRight().getType());
-        getCG().comparison(comparison.getOperator(), suffix);
+        // suffix returned on second param
+        getCG().comparison(comparison.getOperator(), comparison.getRight().getType().promoteToInt(getCG()));
         return null;
     }
 
@@ -186,7 +186,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Cast cast, Void param) {
         cast.getExpression().accept(this, null);
-        getCG().convertTo(cast.getExpression().getType(), cast.getCastType());
+        cast.getExpression().getType().convertTo(cast.getCastType(), getCG());
         return null;
     }
 
