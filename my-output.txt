@@ -131,6 +131,7 @@ halt
 	b2i
 	pushb	49
 	b2i
+	modi
 	outi
 
 #line	20
