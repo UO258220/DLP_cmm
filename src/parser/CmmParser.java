@@ -27,8 +27,8 @@ public class CmmParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, T__33=34, T__34=35, ID=36, INT_CONSTANT=37, CHAR_CONSTANT=38, 
-		REAL_CONSTANT=39, COMMENT=40, EOL=41, WS=42;
+		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, ID=37, INT_CONSTANT=38, 
+		CHAR_CONSTANT=39, REAL_CONSTANT=40, COMMENT=41, EOL=42, WS=43;
 	public static final int
 		RULE_program = 0, RULE_definition = 1, RULE_var_definition = 2, RULE_func_definition = 3, 
 		RULE_main_definition = 4, RULE_param_definitions = 5, RULE_func_body = 6, 
@@ -48,8 +48,8 @@ public class CmmParser extends Parser {
 			null, "','", "';'", "'('", "')'", "'{'", "'}'", "'void'", "'main'", "'['", 
 			"']'", "'struct'", "'double'", "'int'", "'char'", "'write'", "'read'", 
 			"'='", "'while'", "'if'", "'else'", "'return'", "'.'", "'-'", "'!'", 
-			"'*'", "'/'", "'+'", "'>'", "'>='", "'<'", "'<='", "'!='", "'=='", "'&&'", 
-			"'||'"
+			"'*'", "'/'", "'%'", "'+'", "'>'", "'>='", "'<'", "'<='", "'!='", "'=='", 
+			"'&&'", "'||'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -58,8 +58,8 @@ public class CmmParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			"ID", "INT_CONSTANT", "CHAR_CONSTANT", "REAL_CONSTANT", "COMMENT", "EOL", 
-			"WS"
+			null, "ID", "INT_CONSTANT", "CHAR_CONSTANT", "REAL_CONSTANT", "COMMENT", 
+			"EOL", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -1325,7 +1325,7 @@ public class CmmParser extends Parser {
 						setState(296);
 						((ExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !(_la==T__24 || _la==T__25) ) {
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__24) | (1L << T__25) | (1L << T__26))) != 0)) ) {
 							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -1349,7 +1349,7 @@ public class CmmParser extends Parser {
 						setState(301);
 						((ExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !(_la==T__22 || _la==T__26) ) {
+						if ( !(_la==T__22 || _la==T__27) ) {
 							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -1373,7 +1373,7 @@ public class CmmParser extends Parser {
 						setState(306);
 						((ExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31) | (1L << T__32))) != 0)) ) {
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31) | (1L << T__32) | (1L << T__33))) != 0)) ) {
 							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -1397,7 +1397,7 @@ public class CmmParser extends Parser {
 						setState(311);
 						((ExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !(_la==T__33 || _la==T__34) ) {
+						if ( !(_la==T__34 || _la==T__35) ) {
 							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -1561,7 +1561,7 @@ public class CmmParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001*\u0158\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001+\u0158\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
@@ -1612,8 +1612,8 @@ public class CmmParser extends Parser {
 		"\u0001\u000e\u0001\u000e\u0005\u000e\u0151\b\u000e\n\u000e\f\u000e\u0154"+
 		"\t\u000e\u0003\u000e\u0156\b\u000e\u0001\u000e\u0000\u0002\u000e\u001a"+
 		"\u000f\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018"+
-		"\u001a\u001c\u0000\u0004\u0001\u0000\u0019\u001a\u0002\u0000\u0017\u0017"+
-		"\u001b\u001b\u0001\u0000\u001c!\u0001\u0000\"#\u0171\u0000\u001e\u0001"+
+		"\u001a\u001c\u0000\u0004\u0001\u0000\u0019\u001b\u0002\u0000\u0017\u0017"+
+		"\u001c\u001c\u0001\u0000\u001d\"\u0001\u0000#$\u0171\u0000\u001e\u0001"+
 		"\u0000\u0000\u0000\u00022\u0001\u0000\u0000\u0000\u00044\u0001\u0000\u0000"+
 		"\u0000\u0006A\u0001\u0000\u0000\u0000\bK\u0001\u0000\u0000\u0000\nb\u0001"+
 		"\u0000\u0000\u0000\fi\u0001\u0000\u0000\u0000\u000e\u0085\u0001\u0000"+
@@ -1630,21 +1630,21 @@ public class CmmParser extends Parser {
 		"\u0002\u0000-.\u0006\u0001\uffff\uffff\u0000.3\u0001\u0000\u0000\u0000"+
 		"/0\u0003\u0006\u0003\u000001\u0006\u0001\uffff\uffff\u000013\u0001\u0000"+
 		"\u0000\u00002,\u0001\u0000\u0000\u00002/\u0001\u0000\u0000\u00003\u0003"+
-		"\u0001\u0000\u0000\u000045\u0003\u000e\u0007\u000056\u0005$\u0000\u0000"+
-		"6<\u0006\u0002\uffff\uffff\u000078\u0005\u0001\u0000\u000089\u0005$\u0000"+
+		"\u0001\u0000\u0000\u000045\u0003\u000e\u0007\u000056\u0005%\u0000\u0000"+
+		"6<\u0006\u0002\uffff\uffff\u000078\u0005\u0001\u0000\u000089\u0005%\u0000"+
 		"\u00009;\u0006\u0002\uffff\uffff\u0000:7\u0001\u0000\u0000\u0000;>\u0001"+
 		"\u0000\u0000\u0000<:\u0001\u0000\u0000\u0000<=\u0001\u0000\u0000\u0000"+
 		"=?\u0001\u0000\u0000\u0000><\u0001\u0000\u0000\u0000?@\u0005\u0002\u0000"+
-		"\u0000@\u0005\u0001\u0000\u0000\u0000AB\u0003\u0010\b\u0000BC\u0005$\u0000"+
+		"\u0000@\u0005\u0001\u0000\u0000\u0000AB\u0003\u0010\b\u0000BC\u0005%\u0000"+
 		"\u0000CD\u0005\u0003\u0000\u0000DE\u0003\n\u0005\u0000EF\u0005\u0004\u0000"+
 		"\u0000FG\u0005\u0005\u0000\u0000GH\u0003\f\u0006\u0000HI\u0005\u0006\u0000"+
 		"\u0000IJ\u0006\u0003\uffff\uffff\u0000J\u0007\u0001\u0000\u0000\u0000"+
 		"KL\u0005\u0007\u0000\u0000LM\u0005\b\u0000\u0000MN\u0005\u0003\u0000\u0000"+
 		"NO\u0005\u0004\u0000\u0000OP\u0005\u0005\u0000\u0000PQ\u0003\f\u0006\u0000"+
 		"QR\u0005\u0006\u0000\u0000RS\u0006\u0004\uffff\uffff\u0000S\t\u0001\u0000"+
-		"\u0000\u0000TU\u0003\u0012\t\u0000UV\u0005$\u0000\u0000V^\u0006\u0005"+
+		"\u0000\u0000TU\u0003\u0012\t\u0000UV\u0005%\u0000\u0000V^\u0006\u0005"+
 		"\uffff\uffff\u0000WX\u0005\u0001\u0000\u0000XY\u0003\u0012\t\u0000YZ\u0005"+
-		"$\u0000\u0000Z[\u0006\u0005\uffff\uffff\u0000[]\u0001\u0000\u0000\u0000"+
+		"%\u0000\u0000Z[\u0006\u0005\uffff\uffff\u0000[]\u0001\u0000\u0000\u0000"+
 		"\\W\u0001\u0000\u0000\u0000]`\u0001\u0000\u0000\u0000^\\\u0001\u0000\u0000"+
 		"\u0000^_\u0001\u0000\u0000\u0000_c\u0001\u0000\u0000\u0000`^\u0001\u0000"+
 		"\u0000\u0000ac\u0001\u0000\u0000\u0000bT\u0001\u0000\u0000\u0000ba\u0001"+
@@ -1665,7 +1665,7 @@ public class CmmParser extends Parser {
 		"\t\u0000\u0083\u0084\u0006\u0007\uffff\uffff\u0000\u0084\u0086\u0001\u0000"+
 		"\u0000\u0000\u0085t\u0001\u0000\u0000\u0000\u0085\u0082\u0001\u0000\u0000"+
 		"\u0000\u0086\u008e\u0001\u0000\u0000\u0000\u0087\u0088\n\u0003\u0000\u0000"+
-		"\u0088\u0089\u0005\t\u0000\u0000\u0089\u008a\u0005%\u0000\u0000\u008a"+
+		"\u0088\u0089\u0005\t\u0000\u0000\u0089\u008a\u0005&\u0000\u0000\u008a"+
 		"\u008b\u0005\n\u0000\u0000\u008b\u008d\u0006\u0007\uffff\uffff\u0000\u008c"+
 		"\u0087\u0001\u0000\u0000\u0000\u008d\u0090\u0001\u0000\u0000\u0000\u008e"+
 		"\u008c\u0001\u0000\u0000\u0000\u008e\u008f\u0001\u0000\u0000\u0000\u008f"+
@@ -1679,14 +1679,14 @@ public class CmmParser extends Parser {
 		"\u009d\u0005\u000e\u0000\u0000\u009d\u009f\u0006\t\uffff\uffff\u0000\u009e"+
 		"\u0098\u0001\u0000\u0000\u0000\u009e\u009a\u0001\u0000\u0000\u0000\u009e"+
 		"\u009c\u0001\u0000\u0000\u0000\u009f\u0013\u0001\u0000\u0000\u0000\u00a0"+
-		"\u00a1\u0003\u000e\u0007\u0000\u00a1\u00a2\u0005$\u0000\u0000\u00a2\u00a8"+
+		"\u00a1\u0003\u000e\u0007\u0000\u00a1\u00a2\u0005%\u0000\u0000\u00a2\u00a8"+
 		"\u0006\n\uffff\uffff\u0000\u00a3\u00a4\u0005\u0001\u0000\u0000\u00a4\u00a5"+
-		"\u0005$\u0000\u0000\u00a5\u00a7\u0006\n\uffff\uffff\u0000\u00a6\u00a3"+
+		"\u0005%\u0000\u0000\u00a5\u00a7\u0006\n\uffff\uffff\u0000\u00a6\u00a3"+
 		"\u0001\u0000\u0000\u0000\u00a7\u00aa\u0001\u0000\u0000\u0000\u00a8\u00a6"+
 		"\u0001\u0000\u0000\u0000\u00a8\u00a9\u0001\u0000\u0000\u0000\u00a9\u00ab"+
 		"\u0001\u0000\u0000\u0000\u00aa\u00a8\u0001\u0000\u0000\u0000\u00ab\u00ac"+
 		"\u0005\u0002\u0000\u0000\u00ac\u0015\u0001\u0000\u0000\u0000\u00ad\u00ae"+
-		"\u0005$\u0000\u0000\u00ae\u00af\u0005\u0003\u0000\u0000\u00af\u00b0\u0003"+
+		"\u0005%\u0000\u0000\u00ae\u00af\u0005\u0003\u0000\u0000\u00af\u00b0\u0003"+
 		"\u001c\u000e\u0000\u00b0\u00b1\u0005\u0004\u0000\u0000\u00b1\u00b2\u0006"+
 		"\u000b\uffff\uffff\u0000\u00b2\u00b3\u0005\u0002\u0000\u0000\u00b3\u00f3"+
 		"\u0001\u0000\u0000\u0000\u00b4\u00b5\u0005\u000f\u0000\u0000\u00b5\u00b6"+
@@ -1743,13 +1743,13 @@ public class CmmParser extends Parser {
 		"\u0017\u0000\u0000\u0110\u0111\u0003\u001a\r\u000b\u0111\u0112\u0006\r"+
 		"\uffff\uffff\u0000\u0112\u0126\u0001\u0000\u0000\u0000\u0113\u0114\u0005"+
 		"\u0018\u0000\u0000\u0114\u0115\u0003\u001a\r\n\u0115\u0116\u0006\r\uffff"+
-		"\uffff\u0000\u0116\u0126\u0001\u0000\u0000\u0000\u0117\u0118\u0005$\u0000"+
+		"\uffff\u0000\u0116\u0126\u0001\u0000\u0000\u0000\u0117\u0118\u0005%\u0000"+
 		"\u0000\u0118\u0119\u0005\u0003\u0000\u0000\u0119\u011a\u0003\u001c\u000e"+
 		"\u0000\u011a\u011b\u0005\u0004\u0000\u0000\u011b\u011c\u0006\r\uffff\uffff"+
-		"\u0000\u011c\u0126\u0001\u0000\u0000\u0000\u011d\u011e\u0005$\u0000\u0000"+
-		"\u011e\u0126\u0006\r\uffff\uffff\u0000\u011f\u0120\u0005%\u0000\u0000"+
-		"\u0120\u0126\u0006\r\uffff\uffff\u0000\u0121\u0122\u0005&\u0000\u0000"+
-		"\u0122\u0126\u0006\r\uffff\uffff\u0000\u0123\u0124\u0005\'\u0000\u0000"+
+		"\u0000\u011c\u0126\u0001\u0000\u0000\u0000\u011d\u011e\u0005%\u0000\u0000"+
+		"\u011e\u0126\u0006\r\uffff\uffff\u0000\u011f\u0120\u0005&\u0000\u0000"+
+		"\u0120\u0126\u0006\r\uffff\uffff\u0000\u0121\u0122\u0005\'\u0000\u0000"+
+		"\u0122\u0126\u0006\r\uffff\uffff\u0000\u0123\u0124\u0005(\u0000\u0000"+
 		"\u0124\u0126\u0006\r\uffff\uffff\u0000\u0125\u0103\u0001\u0000\u0000\u0000"+
 		"\u0125\u0109\u0001\u0000\u0000\u0000\u0125\u010f\u0001\u0000\u0000\u0000"+
 		"\u0125\u0113\u0001\u0000\u0000\u0000\u0125\u0117\u0001\u0000\u0000\u0000"+
@@ -1768,7 +1768,7 @@ public class CmmParser extends Parser {
 		"\n\u000e\u0000\u0000\u013c\u013d\u0005\t\u0000\u0000\u013d\u013e\u0003"+
 		"\u001a\r\u0000\u013e\u013f\u0005\n\u0000\u0000\u013f\u0140\u0006\r\uffff"+
 		"\uffff\u0000\u0140\u0146\u0001\u0000\u0000\u0000\u0141\u0142\n\r\u0000"+
-		"\u0000\u0142\u0143\u0005\u0016\u0000\u0000\u0143\u0144\u0005$\u0000\u0000"+
+		"\u0000\u0142\u0143\u0005\u0016\u0000\u0000\u0143\u0144\u0005%\u0000\u0000"+
 		"\u0144\u0146\u0006\r\uffff\uffff\u0000\u0145\u0127\u0001\u0000\u0000\u0000"+
 		"\u0145\u012c\u0001\u0000\u0000\u0000\u0145\u0131\u0001\u0000\u0000\u0000"+
 		"\u0145\u0136\u0001\u0000\u0000\u0000\u0145\u013b\u0001\u0000\u0000\u0000"+

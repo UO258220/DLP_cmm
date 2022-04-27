@@ -80,6 +80,8 @@ public class CodeGenerator {
             case "/":
                 div(suffix);
                 break;
+            case "%":
+                mod(suffix);
         }
     }
 
@@ -170,7 +172,7 @@ public class CodeGenerator {
         genCode(String.format("\tdiv%c", suffix));
     }
 
-    public void module(char suffix) {
+    public void mod(char suffix) {
         genCode(String.format("\tmod%c", suffix));
     }
 

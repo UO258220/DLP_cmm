@@ -62,11 +62,6 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
-    public Type module(Type type, int line, int column) {
-        return this;
-    }
-
-    @Override
     public Type compare(Type type, int line, int column) {
         return this;
     }

@@ -2,7 +2,6 @@ package semantic;
 
 import ast.FuncDefinition;
 import ast.expression.*;
-import ast.expression.Module;
 import ast.statements.*;
 import ast.types.*;
 
@@ -240,16 +239,6 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
         arithmetic.setLvalue(false);
         arithmetic.setType(arithmetic.getLeft().getType().arithmetic(arithmetic.getRight().getType(),
                 arithmetic.getLine(), arithmetic.getColumn()));
-        return null;
-    }
-
-    @Override
-    public Void visit(Module module, Type param) {
-        module.getLeft().accept(this, null);
-        module.getRight().accept(this, null);
-        module.setLvalue(false);
-        module.setType(module.getLeft().getType().module(module.getRight().getType(),
-                module.getLine(), module.getColumn()));
         return null;
     }
 

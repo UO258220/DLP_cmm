@@ -19,7 +19,6 @@ public interface Type extends ASTNode {
     Type minus(int line, int column);
     Type not(int line, int column);
     Type arithmetic(Type type, int line, int column);
-    Type module(Type type, int line, int column);
     Type compare(Type type, int line, int column);
     Type logical(Type type, int line, int column);
 

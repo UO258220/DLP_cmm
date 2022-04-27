@@ -168,11 +168,15 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(While whileStatement, Void param) {
         String conditionLabel = getCG().nextLabel(), exitLabel = getCG().nextLabel();
+        getCG().line(whileStatement.getLine());
+        getCG().comment("While");
         getCG().label(conditionLabel);
         whileStatement.getCondition().accept(valueCGVisitor, null);
         getCG().jz(exitLabel);
+        getCG().comment("Start of the while body");
         whileStatement.getBody().forEach( s -> s.accept(this, null) );
         getCG().jmp(conditionLabel);
+        getCG().comment("End of the while body");
         getCG().label(exitLabel);
         return null;
     }
@@ -180,12 +184,17 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(IfElse ifElse, Void param) {
         String elseLabel = getCG().nextLabel(), exitLabel = getCG().nextLabel();
+        getCG().line(ifElse.getLine());
+        getCG().comment("IfElse");
         ifElse.getCondition().accept(valueCGVisitor, null);
         getCG().jz(elseLabel);
+        getCG().comment("Start of the if branch body");
         ifElse.getBody().forEach( s -> s.accept(this, null) );
         getCG().jmp(exitLabel);
+        getCG().comment("Start of the else branch body");
         getCG().label(elseLabel);
         ifElse.getElseBody().forEach( s -> s.accept(this, null) );
+        getCG().comment("End of the if-else bodies");
         getCG().label(exitLabel);
         return null;
     }

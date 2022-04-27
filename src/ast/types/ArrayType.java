@@ -27,7 +27,7 @@ public class ArrayType extends AbstractType {
 
     @Override
     public String toString() {
-        return String.format("ArrayType[size=%d]", size);
+        return String.format("[%d,%s]", size, innerType.toString());
     }
 
     @Override

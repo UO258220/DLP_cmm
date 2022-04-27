@@ -4,7 +4,6 @@ import ast.FuncDefinition;
 import ast.Program;
 import ast.VarDefinition;
 import ast.expression.*;
-import ast.expression.Module;
 import ast.statements.*;
 import ast.types.*;
 import semantic.Visitor;
@@ -143,11 +142,6 @@ public abstract class AbstractCGVisitor<TP,TR> implements Visitor<TP,TR> {
 
     @Override
     public TR visit(Arithmetic arithmetic, TP param) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(Module module, TP param) {
         throw new IllegalStateException();
     }
 

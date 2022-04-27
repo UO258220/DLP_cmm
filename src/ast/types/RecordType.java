@@ -39,7 +39,13 @@ public class RecordType extends AbstractType {
 
     @Override
     public String toString() {
-        return "RecordType";
+        StringBuilder sb = new StringBuilder("record(");
+        for ( RecordField field : getFields() ) {
+            sb.append(String.format("(%s x %s)x", field.getName(), field.getType().toString()));
+        }
+        sb.setLength(sb.length() - 1);
+        sb.append(")");
+        return sb.toString();
     }
 
     @Override

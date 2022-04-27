@@ -62,10 +62,6 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
         return new ErrorType(line, column, String.format("type %s does not support arithmetic operations", this));
     }
 
-    public Type module(Type type, int line, int column) {
-        return new ErrorType(line, column, String.format("type %s does not support module", this));
-    }
-
     public Type compare(Type type, int line, int column) {
         return new ErrorType(line, column, String.format("type %s does not support comparison", this));
     }

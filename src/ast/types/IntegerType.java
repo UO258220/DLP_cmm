@@ -103,18 +103,6 @@ public class IntegerType extends AbstractType {
     }
 
     @Override
-    public Type module(Type type, int line, int column) {
-        if (type instanceof ErrorType) {
-            return type;
-        }
-        if (type instanceof IntegerType) {
-            return new IntegerType(line, column);
-        }
-        return new ErrorType(line, column,
-                String.format("types %s and %s cannot be the terms of a module operation", this, type));
-    }
-
-    @Override
     public Type compare(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;

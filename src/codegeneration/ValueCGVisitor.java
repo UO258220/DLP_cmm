@@ -1,7 +1,6 @@
 package codegeneration;
 
 import ast.expression.*;
-import ast.expression.Module;
 
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
@@ -152,16 +151,6 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
         arithmetic.getRight().accept(this, null);
         arithmetic.getRight().getType().convertTo(arithmetic.getType(), getCG());
         getCG().arithmetic(arithmetic.getOperator(), arithmetic.getType().getSuffix());
-        return null;
-    }
-
-    @Override
-    public Void visit(Module module, Void param) {
-        module.getLeft().accept(this, null);
-        module.getLeft().getType().convertTo(module.getType(), getCG());
-        module.getRight().accept(this, null);
-        module.getRight().getType().convertTo(module.getType(), getCG());
-        getCG().module(module.getType().getSuffix());
         return null;
     }
 

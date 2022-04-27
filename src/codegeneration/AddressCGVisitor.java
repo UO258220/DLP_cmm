@@ -73,7 +73,7 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
         fieldAccess.getExpression().accept(this, null);
-        getCG().pushi(((RecordType)fieldAccess.getExpression()).getField(fieldAccess.getField()).getOffset());
+        getCG().pushi(((RecordType)fieldAccess.getExpression().getType()).getField(fieldAccess.getField()).getOffset());
         getCG().add('i');
         return null;
     }
