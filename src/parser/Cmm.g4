@@ -240,7 +240,7 @@ expression returns [Expression ast]:
                     | e1=expression '%' e2=expression
                         { $ast = new ast.expression.Module($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $e2.ast); }
 
-                    | e1=expression op=('*'|'/'|'%') e2=expression
+                    | e1=expression op=('*'|'/') e2=expression
                         { $ast = new Arithmetic($e1.ast.getLine(), $e1.ast.getColumn(), $op.text, $e1.ast, $e2.ast); }
 
                     | e1=expression op=('+'|'-') e2=expression
