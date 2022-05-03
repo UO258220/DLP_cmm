@@ -108,6 +108,12 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
      * value[[ FieldAccess: expression1 -> expression2 ID ]] =
      *      address[[ expression1 ]]
      *      <load> expression1.type.suffix()
+     *
+     *
+     * FuncInvocation
+     * execute[[ FuncInvocation: expression -> expression1 expression2* ]] =
+     *      expression2*.forEach( e -> value[[ e ]] )
+     *      <call > expression1.name
      */
     private AddressCGVisitor addressCGVisitor;
 

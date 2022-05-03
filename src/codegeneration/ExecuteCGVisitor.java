@@ -22,21 +22,27 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
      *      ID <:>
      *      <enter> definition.localsBytesSum
      *      <' * Parameters>
-     *      type.definitions.forEach( d -> execute[[ d ]] )
+     *      int paramsBytesSum = type.getParams().stream().mapToInt( vd -> vd.getType().numberOfBytes() ).sum();
+     *      ReturnValuesDTO dto = new ReturnValuesDTO(
+     *          type.returnType.numberOfBytes(),
+     *          definition.getLocalsBytesSum(),
+     *          paramsBytesSum
+     *      )
+     *      type.definitions.forEach( d -> execute[[ d ]] (dto) )
      *      <' * Local variables>
-     *      statement*.forEach( s -> execute[[ s ]] )
+     *      statement*.forEach( s -> execute[[ s ]] ( (dto) )
      *      if ( type.returnType instanceof VoidType ) {
-     *          <ret 0, > definition.localsBytesSum <, > definition.type.paramsBytesSum
+     *          <ret 0, > definition.getLocalsBytesSum() <, > paramsBytesSum
      *      }
      *
      *
      * Variable definition
-     * execute[[ VarDefinition: definition -> type ID ]] =
+     * execute[[ VarDefinition: definition -> type ID ]] (ReturnValuesDTO dto) =
      *      <' * > type.toString() ID < (offset > definition.offset <)>
      *
      *
      * Read statement
-     * execute[[ ReadStatement: statement -> expression ]] =
+     * execute[[ ReadStatement: statement -> expression ]] (ReturnValuesDTO dto) =
      *      <' * Read>
      *      address[[ expression ]]
      *      <in> expression.type.suffix()
@@ -44,39 +50,55 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
      *
      *
      * Write statement
-     * execute[[ WriteStatement: statement -> expression ]] =
+     * execute[[ WriteStatement: statement -> expression ]] (ReturnValuesDTO dto) =
      *      <' * Write>
      *      value[[ expression ]]
      *      <out> expression.type.suffix()
      *
      *
      * Assignment
-     * execute[[ Assignment: statement -> expression1 expression2 ]] =
+     * execute[[ Assignment: statement -> expression1 expression2 ]] (ReturnValuesDTO dto) =
      *      address[[ expression1 ]]
      *      value[[ expression2 ]]
      *      <store> expression1.type.suffix();
      *
      *
      * While
-     * execute[[ While: statement -> expression statement* ]] =
+     * execute[[ While: statement -> expression statement* ]] (ReturnValuesDTO dto) =
      *      String conditionLabel = cg.nextlabel(), exitLabel = cg.nextLabel();
      *      conditionLabel <:>
      *      value[[ expression ]]
      *      <jz > exitLabel
-     *      statement*.forEach( s -> execute[[ s ]] )
+     *      statement*.forEach( s -> execute[[ s ]] (dto) )
      *      <jmp > conditionLabel
      *      exitLabel <:>
      *
+     *
      * IfElse
-     * execute[[ IfElse: statement1 -> expression statement2* statement3* ]] =
+     * execute[[ IfElse: statement1 -> expression statement2* statement3* ]] (ReturnValuesDTO dto) =
      *      String elseLabel = cg.nextlabel(), exitLabel = cg.nextLabel():
      *      value[[ expression ]]
      *      <jz > elseLabel
-     *      statement2*.forEach( s -> execute[[ s ]] )
+     *      statement2*.forEach( s -> execute[[ s ]] (dto) )
      *      <jmp > exitLabel
      *      elseLabel <:>
-     *      statement3*.forEach( s -> execute[[ s ]] )
+     *      statement3*.forEach( s -> execute[[ s ]] (dto) )
      *      exitLabel <:>
+     *
+     * FuncInvocation
+     * execute[[ FuncInvocation: statement -> expression1 expression2* ]] (ReturnValuesDTO dto) =
+     *      Expression expression0 = (Expression) statement
+     *      expression2*.forEach( e -> value[[ e ]] )
+     *      <call > expression1.name
+     *      if (expression1.type.returnType instanceof VoidType) {
+     *          <pop> expression1.type.returnType.suffix()
+     *      }
+     *
+     *
+     * ReturnStatement
+     * execute[[ ReturnStatement: statement -> expression ]] (ReturnValuesDTO dto) =
+     *      value[[ expression ]]
+     *      <ret > dto.returnBytes <, > dto.localsBytes, <, > dto.paramsBytes
      */
     private ValueCGVisitor valueCGVisitor;
     private AddressCGVisitor addressCGVisitor;
@@ -118,15 +140,14 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
             }
             st.accept(this, null);
         }
-
+        int paramsBytesSum = ftype.getParams().stream().mapToInt( vd -> vd.getType().numberOfBytes() ).sum();
         if (ftype.getReturnType() instanceof VoidType) {
             int numParams = ftype.getParams().size();
             if (numParams == 0) {
                 getCG().ret(0, funcDefinition.getLocalsBytesSum(), 0);
                 return null;
             }
-            getCG().ret(0, funcDefinition.getLocalsBytesSum(),
-                    ftype.getParams().get(numParams - 1).getOffset() - 4);
+            getCG().ret(0, funcDefinition.getLocalsBytesSum(), paramsBytesSum);
         }
         return null;
     }
