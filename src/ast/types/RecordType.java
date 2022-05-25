@@ -55,10 +55,10 @@ public class RecordType extends AbstractType {
 
     @Override
     public Type dot(String name, int line, int column) {
-        Type fieldType = getField(name).getType();
-        return fieldType == null ?
+        RecordField field = getField(name);
+        return field == null ?
                 new ErrorType(line, column, String.format("There is no field \"%s\" in struct type", name)) :
-                fieldType;
+                field.getType();
     }
 
     @Override

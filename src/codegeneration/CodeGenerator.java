@@ -57,6 +57,8 @@ public class CodeGenerator {
         genCode(String.format("\tenter\t%s", bytes));
     }
 
+    public void call(String name) { genCode(String.format("\tcall %s", name)); }
+
     public void ret(int typeBytes, int localsBytes, int paramsBytes) {
         genCode(String.format("\tret\t%d, %d, %d", typeBytes, localsBytes, paramsBytes));
     }
@@ -154,6 +156,10 @@ public class CodeGenerator {
 
     public void pushBP() {
         genCode("\tpush\tbp");
+    }
+
+    public void pop(char suffix) {
+        genCode(String.format("\tpop%c", suffix));
     }
 
     public void add(char suffix) {

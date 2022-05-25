@@ -3,6 +3,9 @@ package ast.types;
 import semantic.Visitor;
 
 public class VoidType extends AbstractType {
+
+    private static final int VOID_BYTES = 0;
+
     public VoidType(int line, int column) {
         super(line, column);
     }
@@ -17,4 +20,8 @@ public class VoidType extends AbstractType {
         return visitor.visit(this, param);
     }
 
+    @Override
+    public int numberOfBytes() {
+        return VOID_BYTES;
+    }
 }

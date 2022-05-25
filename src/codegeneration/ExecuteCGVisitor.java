@@ -3,9 +3,10 @@ package codegeneration;
 import ast.*;
 import ast.statements.*;
 import ast.types.FunctionType;
+import ast.types.Type;
 import ast.types.VoidType;
 
-public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
+public class ExecuteCGVisitor extends AbstractCGVisitor<ReturnValuesDTO, Void> {
 
     /**
      * Rules for execute code generation
@@ -90,7 +91,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
      *      Expression expression0 = (Expression) statement
      *      expression2*.forEach( e -> value[[ e ]] )
      *      <call > expression1.name
-     *      if (expression1.type.returnType instanceof VoidType) {
+     *      if (!expression1.type.returnType instanceof VoidType) {
      *          <pop> expression1.type.returnType.suffix()
      *      }
      *
@@ -112,10 +113,12 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(Program program, Void param) {
+    public Void visit(Program program, ReturnValuesDTO dto) {
+        boolean halted = false;
         for (Definition def : program.getDefs()) {
-            if (def instanceof FuncDefinition) {
+            if (def instanceof FuncDefinition && !halted) {
                 getCG().mainInvocation();
+                halted = true;
             }
             def.accept(this, null);
         }
@@ -123,13 +126,19 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(FuncDefinition funcDefinition, Void param) {
+    public Void visit(FuncDefinition funcDefinition, ReturnValuesDTO dto) {
         FunctionType ftype = (FunctionType)funcDefinition.getType();
 
         getCG().line(funcDefinition.getLine());
         getCG().label(funcDefinition.getName());
         getCG().comment("Parameters");
         ftype.getParams().forEach( p -> p.accept(this,null) );
+
+        dto = new ReturnValuesDTO(
+                ftype.getReturnType().numberOfBytes(),
+                funcDefinition.getLocalsBytesSum(),
+                ((FunctionType) funcDefinition.getType()).getParams().stream().mapToInt(vd -> vd.getType().numberOfBytes()).sum()
+        );
 
         getCG().comment("Local variables");
         boolean entered = false;
@@ -138,7 +147,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
                 getCG().enter(funcDefinition.getLocalsBytesSum());
                 entered = true;
             }
-            st.accept(this, null);
+            st.accept(this, dto);
         }
         int paramsBytesSum = ftype.getParams().stream().mapToInt( vd -> vd.getType().numberOfBytes() ).sum();
         if (ftype.getReturnType() instanceof VoidType) {
@@ -153,13 +162,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(VarDefinition varDefinition, Void param) {
+    public Void visit(VarDefinition varDefinition, ReturnValuesDTO dto) {
         getCG().commentVariable(varDefinition);
         return null;
     }
 
     @Override
-    public Void visit(ReadStatement readStatement, Void param) {
+    public Void visit(ReadStatement readStatement, ReturnValuesDTO dto) {
         getCG().line(readStatement.getLine());
         getCG().comment("Read");
         readStatement.getExpression().accept(addressCGVisitor, null);
@@ -169,7 +178,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(WriteStatement writeStatement, Void param) {
+    public Void visit(WriteStatement writeStatement, ReturnValuesDTO dto) {
         getCG().line(writeStatement.getLine());
         getCG().comment("Write");
         writeStatement.getExpression().accept(valueCGVisitor, null);
@@ -178,7 +187,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(Assignment assignment, Void param) {
+    public Void visit(Assignment assignment, ReturnValuesDTO dto) {
         getCG().line(assignment.getLine());
         assignment.getLeft().accept(addressCGVisitor, null);
         assignment.getRight().accept(valueCGVisitor, null);
@@ -187,7 +196,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(While whileStatement, Void param) {
+    public Void visit(While whileStatement, ReturnValuesDTO dto) {
         String conditionLabel = getCG().nextLabel(), exitLabel = getCG().nextLabel();
         getCG().line(whileStatement.getLine());
         getCG().comment("While");
@@ -195,7 +204,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         whileStatement.getCondition().accept(valueCGVisitor, null);
         getCG().jz(exitLabel);
         getCG().comment("Start of the while body");
-        whileStatement.getBody().forEach( s -> s.accept(this, null) );
+        whileStatement.getBody().forEach( s -> s.accept(this, dto) );
         getCG().jmp(conditionLabel);
         getCG().comment("End of the while body");
         getCG().label(exitLabel);
@@ -203,20 +212,43 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(IfElse ifElse, Void param) {
+    public Void visit(IfElse ifElse, ReturnValuesDTO dto) {
         String elseLabel = getCG().nextLabel(), exitLabel = getCG().nextLabel();
         getCG().line(ifElse.getLine());
         getCG().comment("IfElse");
         ifElse.getCondition().accept(valueCGVisitor, null);
         getCG().jz(elseLabel);
         getCG().comment("Start of the if branch body");
-        ifElse.getBody().forEach( s -> s.accept(this, null) );
+        ifElse.getBody().forEach( s -> s.accept(this, dto) );
         getCG().jmp(exitLabel);
         getCG().comment("Start of the else branch body");
         getCG().label(elseLabel);
-        ifElse.getElseBody().forEach( s -> s.accept(this, null) );
+        ifElse.getElseBody().forEach( s -> s.accept(this, dto) );
         getCG().comment("End of the if-else bodies");
         getCG().label(exitLabel);
+        return null;
+    }
+
+    @Override
+    public Void visit(FuncInvocation funcInvocation, ReturnValuesDTO dto) {
+        funcInvocation.getParams().forEach( p -> p.accept(valueCGVisitor, null) );
+        getCG().call(funcInvocation.getVariable().getName());
+        Type returnType = ((FunctionType)funcInvocation.getVariable().getType()).getReturnType();
+        if (!(returnType instanceof VoidType)) {
+            getCG().pop(returnType.getSuffix());
+        }
+        return null;
+    }
+
+    /* ReturnStatement
+     * execute[[ ReturnStatement: statement -> expression ]] (ReturnValuesDTO dto) =
+     *      value[[ expression ]]
+     *      <ret > dto.returnBytes <, > dto.localsBytes, <, > dto.paramsBytes
+     */
+    @Override
+    public Void visit(ReturnStatement returnStatement, ReturnValuesDTO dto) {
+        returnStatement.getExpression().accept(valueCGVisitor, null);
+        getCG().ret(dto.returnBytes, dto.localsBytes, dto.paramsBytes);
         return null;
     }
 

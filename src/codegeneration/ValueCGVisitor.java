@@ -1,6 +1,7 @@
 package codegeneration;
 
 import ast.expression.*;
+import ast.statements.FuncInvocation;
 
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
@@ -203,6 +204,13 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(FieldAccess fieldAccess, Void param) {
         fieldAccess.accept(addressCGVisitor, null);
         getCG().load(fieldAccess.getType().getSuffix());
+        return null;
+    }
+
+    @Override
+    public Void visit(FuncInvocation funcInvocation, Void param) {
+        funcInvocation.getParams().forEach( p -> p.accept(this, null) );
+        getCG().call(funcInvocation.getVariable().getName());
         return null;
     }
 }
