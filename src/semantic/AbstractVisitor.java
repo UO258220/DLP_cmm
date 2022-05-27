@@ -72,6 +72,9 @@ public abstract class AbstractVisitor<TP,TR> implements Visitor<TP,TR> {
     }
 
     @Override
+    public TR visit(BooleanType booleanType, TP param) { return null; }
+
+    @Override
     public TR visit(ErrorType charType, TP param) {
         return null;
     }
@@ -197,5 +200,8 @@ public abstract class AbstractVisitor<TP,TR> implements Visitor<TP,TR> {
     public TR visit(RealLiteral realLiteral, TP param) {
         return null;
     }
+
+    @Override
+    public TR visit(BooleanLiteral booleanLiteral, TP param) { return null; }
 
 }

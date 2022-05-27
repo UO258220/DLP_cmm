@@ -76,6 +76,9 @@ public abstract class AbstractCGVisitor<TP,TR> implements Visitor<TP,TR> {
     }
 
     @Override
+    public TR visit(BooleanType booleanType, TP param) { throw new IllegalStateException(); }
+
+    @Override
     public TR visit(ErrorType errorType, TP param) {
         throw new IllegalStateException();
     }
@@ -174,4 +177,7 @@ public abstract class AbstractCGVisitor<TP,TR> implements Visitor<TP,TR> {
     public TR visit(RealLiteral realLiteral, TP param) {
         throw new IllegalStateException();
     }
+
+    @Override
+    public TR visit(BooleanLiteral booleanLiteral, TP param) { throw new IllegalStateException(); }
 }

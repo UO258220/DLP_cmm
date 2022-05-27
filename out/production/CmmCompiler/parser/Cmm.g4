@@ -144,6 +144,9 @@ built_in_type returns [Type ast]:
 
                     | c='char'
                         { $ast = new CharType($c.getLine(), $c.getCharPositionInLine() + 1); }
+
+                    | b='boolean'
+                        { $ast = new BooleanType($b.getLine(), $b.getCharPositionInLine() + 1); }
                     ;
 
 
@@ -253,9 +256,6 @@ expression returns [Expression ast]:
                         { $ast = new FuncInvocation($ID.getLine(), $ID.getCharPositionInLine() + 1,
                         new Variable($ID.getLine(), $ID.getCharPositionInLine() + 1, $ID.text), $arguments.ast); }
 
-                    | ID
-                        { $ast = new Variable($ID.getLine(), $ID.getCharPositionInLine() + 1, $ID.text); }
-
                     | ic=INT_CONSTANT
                         { $ast = new IntLiteral($ic.getLine(), $ic.getCharPositionInLine() + 1,
                         LexerHelper.lexemeToInt($ic.text)); }
@@ -267,6 +267,13 @@ expression returns [Expression ast]:
                     | rc=REAL_CONSTANT
                         { $ast = new RealLiteral($rc.getLine(), $rc.getCharPositionInLine() + 1,
                         LexerHelper.lexemeToReal($rc.text)); }
+
+                    | bc=BOOL_CONSTANT
+                        { $ast = new BooleanLiteral($bc.getLine(), $bc.getCharPositionInLine() + 1,
+                        LexerHelper.lexemeToBoolean($bc.text)); }
+
+                    | ID
+                        { $ast = new Variable($ID.getLine(), $ID.getCharPositionInLine() + 1, $ID.text); }
                     ;
 
 
@@ -282,9 +289,6 @@ arguments returns [List<Expression> ast = new ArrayList<Expression>()]:
 
 /* TERMINALS */
 
-ID:                 ('_' | LETTER) ('_' | LETTER | [0-9])*
-                    ;
-
 INT_CONSTANT:       [1-9][0-9]*
                     | '0'
                     ;
@@ -295,6 +299,13 @@ CHAR_CONSTANT:      '\'' ( . | '\\' INT_CONSTANT | '\\' 'n' | '\\' 't' ) '\''
 REAL_CONSTANT:      INT_CONSTANT? '.' [0-9]+ EXPONENT?
                     | INT_CONSTANT '.' [0-9]* EXPONENT?
                     | INT_CONSTANT EXPONENT?
+                    ;
+
+BOOL_CONSTANT:      'true'
+                    | 'false'
+                    ;
+
+ID:                 ('_' | LETTER) ('_' | LETTER | [0-9])*
                     ;
 
 fragment EXPONENT:  [eE] [-+]? INT_CONSTANT

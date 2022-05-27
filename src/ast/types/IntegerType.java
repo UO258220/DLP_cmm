@@ -48,11 +48,6 @@ public class IntegerType extends AbstractType {
     }
 
     @Override
-    public void asBoolean(int line, int column) {
-        // No error thrown
-    }
-
-    @Override
     public void returnMatching(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             // For now, the only thing to do here is to stop the creation of a new error
@@ -86,11 +81,6 @@ public class IntegerType extends AbstractType {
     }
 
     @Override
-    public Type not(int line, int column) {
-        return new IntegerType(line, column);
-    }
-
-    @Override
     public Type arithmetic(Type type, int line, int column) {
         if (type instanceof ErrorType) {
             return type;
@@ -108,21 +98,9 @@ public class IntegerType extends AbstractType {
             return type;
         }
         if (type instanceof IntegerType) {
-            return new IntegerType(line, column);
+            return new BooleanType(line, column);
         }
         return new ErrorType(line, column, String.format("types %s and %s cannot be compared", this, type));
-    }
-
-    @Override
-    public Type logical(Type type, int line, int column) {
-        if (type instanceof ErrorType) {
-            return type;
-        }
-        if (type instanceof IntegerType) {
-            return new IntegerType(line, column);
-        }
-        return new ErrorType(line, column,
-                String.format("types %s and %s cannot be the terms of a logical operation", this, type));
     }
 
     @Override

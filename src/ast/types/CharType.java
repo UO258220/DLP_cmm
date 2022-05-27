@@ -93,7 +93,7 @@ public class CharType extends AbstractType {
             return type;
         }
         if (type instanceof CharType) {
-            return new IntegerType(line, column);
+            return new BooleanType(line, column);
         }
         return new ErrorType(line, column, String.format("types %s and %s cannot be compared", this, type));
     }

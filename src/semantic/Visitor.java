@@ -29,6 +29,8 @@ public interface Visitor<TP,TR> {
 
     public TR visit(CharType charType, TP param);
 
+    public TR visit(BooleanType booleanType, TP param);
+
     public TR visit(ErrorType errorType, TP param);
 
     public TR visit(FuncInvocation funcInvocation, TP param);
@@ -69,4 +71,5 @@ public interface Visitor<TP,TR> {
 
     public TR visit(RealLiteral realLiteral, TP param);
 
+    public TR visit(BooleanLiteral booleanLiteral, TP param);
 }

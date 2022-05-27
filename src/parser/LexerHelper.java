@@ -43,5 +43,15 @@ public class LexerHelper {
 		}
 		return -1;
 	}
+
+	public static int lexemeToBoolean(String str) {
+		if (str.equals("true")) {
+			return 1;
+		}
+		else if (str.equals("false")) {
+			return 0;
+		}
+		return -1;
+	}
 	
 }

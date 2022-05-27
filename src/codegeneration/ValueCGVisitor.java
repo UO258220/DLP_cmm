@@ -23,6 +23,11 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
      *      <pushf> REAL_CONSTANT
      *
      *
+     * Boolean constant
+     * value[[ BooleanLiteral: expression -> BOOL_CONSTANT ]] =
+     *      <pushi> lexemeToBoolean(BOOL_CONSTANT)
+     *
+     *
      * Variable
      * value[[ Variable: expression -> ID ]] =
      *      address[[ expression ]]
@@ -141,6 +146,12 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(RealLiteral realLiteral, Void param) {
         getCG().pushf(realLiteral.getValue());
+        return null;
+    }
+
+    @Override
+    public Void visit(BooleanLiteral booleanLiteral, Void param) {
+        getCG().pushi(booleanLiteral.getValue());
         return null;
     }
 

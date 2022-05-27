@@ -98,7 +98,7 @@ public class DoubleType extends AbstractType {
             return type;
         }
         if (type instanceof DoubleType) {
-            return new IntegerType(line, column);
+            return new BooleanType(line, column);
         }
         return new ErrorType(line, column, String.format("types %s and %s cannot be compared", this, type));
     }

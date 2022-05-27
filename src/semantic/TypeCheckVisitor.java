@@ -102,6 +102,9 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
      *
      * P:   RealLiteral:    expression -> REAL_CONSTANT
      * R:   expression.type = new DoubleType()
+     *
+     * P:   BooleanLiteral: expression -> BOOL_CONSTANT
+     * R:   expression.type = new BooleanType()
      */
 
     @Override
@@ -293,6 +296,13 @@ public class TypeCheckVisitor extends AbstractVisitor<Type,Void> {
     public Void visit(RealLiteral realLiteral, Type param) {
         realLiteral.setLvalue(false);
         realLiteral.setType(new DoubleType(realLiteral.getLine(), realLiteral.getColumn()));
+        return null;
+    }
+
+    @Override
+    public Void visit(BooleanLiteral booleanLiteral, Type param) {
+        booleanLiteral.setLvalue(false);
+        booleanLiteral.setType(new BooleanType(booleanLiteral.getLine(), booleanLiteral.getColumn()));
         return null;
     }
 }
